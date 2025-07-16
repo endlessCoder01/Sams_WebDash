@@ -6,3 +6,10 @@
     padding: 16px;
     text-align: center;
 }
+
+.Sign{
+    padding: "8px";
+    background-color: chartreuse;
+    border: 1px solid blue;
+    font: inherit;
+}

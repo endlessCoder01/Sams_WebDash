@@ -74,7 +74,7 @@ const TaskTable = () => {
       <h2 className="heading">📝 Task Schedule</h2>
 
       <div className="controls">
-        <div className="filter">
+        <div className="filters">
           <FaFilter />
           <select
             onChange={(e) => setFilterStatus(e.target.value)}

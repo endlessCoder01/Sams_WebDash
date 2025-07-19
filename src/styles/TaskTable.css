@@ -247,24 +247,7 @@
   text-align: left;
 }
 
-.badge {
-  padding: 0.3rem 0.6rem;
-  border-radius: 12px;
-  font-weight: bold;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-}
 
-.badge.pending {
-  background-color: #ffed8b;
-  color: #6b6f1d;
-}
-
-.badge.completed {
-  background-color: #6b6f1d;
-  color: #fff;
-}
 
 .assign-btn {
   margin-top: 0.3rem;
@@ -400,14 +383,36 @@
   margin-bottom: 8px;
 }
 
+.filters select {
+  gap: 45px;
+
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  background-color: #FCE023;
+  color: #000;
+  margin-top: 10px;
+  margin-right: 4px;
+}
+
 /* Filter and sort */
-.task-filter-sort {
+.sort {
   display: flex;
   gap: 16px;
   flex-wrap: wrap;
+
+    padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  background-color: #fff;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
 }
 
-.task-filter-sort select {
+.sort select {
   padding: 10px 14px;
   border-radius: 12px;
   border: none;
@@ -418,7 +423,7 @@
   cursor: pointer;
 }
 
-.task-filter-sort select:hover {
+.sort:hover {
   background-color: #fdf189;
 }
 
@@ -449,8 +454,27 @@
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
 }
 
+/* .badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.badge.pending {
+  background-color: #ffed8b;
+  color: #6b6f1d;
+}
+
+.badge.completed {
+  background-color: #6b6f1d;
+  color: #fff;
+} */
+
 /* Status badge */
-.task-badge {
+.badge {
   padding: 6px 12px;
   font-size: 13px;
   font-weight: 600;
@@ -459,12 +483,21 @@
   text-transform: capitalize;
 }
 
-.status-completed {
-  background-color: #6B6F1D;
-  color: #fff;
+.controls{
+     display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
 }
 
-.status-pending {
+.badge.completed {
+  background-color: #eef0d1d3;
+  border: 1px solid #27fd27;
+  color: #00800b;
+}
+
+.badge.pending {
   background-color: #000;
   color: #fce023;
 }

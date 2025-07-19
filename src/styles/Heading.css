@@ -1,0 +1,18 @@
+.signup-heading {
+  font-size: 2.2rem;
+  letter-spacing: 0.015em;
+  font-family: 'Poppins', 'Segoe UI', Arial, sans-serif;
+  font-weight: 800;
+  margin-bottom: 0.08rem;
+  color: var(--primary-green);
+  text-shadow: 0 2px 16px #b2ff5965, 0 1.5px 3px #00c85340;
+  background: linear-gradient(92deg, #00c853, #69f0ae 80%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: headingAppear 1.2s cubic-bezier(.33,.85,.45,1.2);
+}
+@keyframes headingAppear {
+  from { opacity: 0; transform: translateY(-40px);}
+  to   { opacity: 1; transform: translateY(0);}
+}

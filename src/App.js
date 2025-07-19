@@ -4,6 +4,7 @@ import SignUp from './pages/auth/signUp';
 import WeatherCard from './components/weather';
 import NewsCard from './components/news';
 import NewsCard2 from './components/News3';
+import TaskTable from './components/tasktable';
 
 function App() {
   const sampleData = {
@@ -27,7 +28,7 @@ function App() {
     // </div>
 
         <div style={{ backgroundColor: "#000", minHeight: "100vh", padding: "20px" }}>
-      <NewsCard2 />
+      <TaskTable />
     </div>
   );
 }

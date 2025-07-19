@@ -1,0 +1,631 @@
+/* .task-table-container {
+  background-color: #FCE023;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: 'Segoe UI', sans-serif;
+  overflow-x: auto;
+}
+
+.task-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.task-table-header h2 {
+  color: #000;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.task-filter-sort {
+  display: flex;
+  gap: 10px;
+}
+
+.task-filter-sort select {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #6B6F1D;
+  background: #fff;
+  font-size: 14px;
+  color: #333;
+}
+
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.task-table th,
+.task-table td {
+  padding: 12px;
+  text-align: left;
+  font-size: 14px;
+  border-bottom: 1px solid #ddd;
+}
+
+.task-table th {
+  background-color: #6B6F1D;
+  color: #fff;
+  font-weight: 500;
+}
+
+.task-table td {
+  background-color: #fff;
+}
+
+.task-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+}
+
+.status-completed {
+  background-color: #6B6F1D;
+  color: white;
+}
+
+.status-pending {
+  background-color: #000000;
+  color: #FCE023;
+}
+
+.status-inprogress {
+  background-color: #f59e0b;
+  color: white;
+}
+
+.assign-btn {
+  padding: 4px 10px;
+  background-color: #FCE023;
+  color: #000;
+  border: 1px solid #6B6F1D;
+  border-radius: 6px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.assign-btn:hover {
+  background-color: #6B6F1D;
+  color: white;
+}
+
+.assign-popup {
+  position: absolute;
+  z-index: 100;
+  background-color: #fff;
+  border: 1px solid #ccc;
+  padding: 10px;
+  border-radius: 8px;
+  margin-top: 6px;
+  width: 160px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.assign-popup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.assign-popup li {
+  padding: 6px;
+  cursor: pointer;
+  color: #333;
+  border-radius: 6px;
+}
+
+.assign-popup li:hover {
+  background-color: #FCE023;
+  color: #000;
+}
+
+.fab-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #FCE023;
+  color: #000;
+  border: none;
+  border-radius: 50%;
+  width: 56px;
+  height: 56px;
+  font-size: 26px;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.3s ease;
+  z-index: 1000;
+}
+
+.fab-button:hover {
+  background-color: #6B6F1D;
+  color: #fff;
+}
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal {
+  background-color: white;
+  border-radius: 12px;
+  padding: 20px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+}
+
+.modal h3 {
+  margin-top: 0;
+  font-size: 20px;
+  margin-bottom: 10px;
+  color: #000;
+}
+
+.modal form label {
+  display: block;
+  margin-top: 10px;
+  font-weight: 500;
+}
+
+.modal form input,
+.modal form textarea,
+.modal form select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-top: 4px;
+  font-size: 14px;
+}
+
+.modal form button {
+  margin-top: 16px;
+  padding: 10px;
+  background-color: #6B6F1D;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.modal form button:hover {
+  background-color: #000;
+} */
+
+
+
+
+
+/* --- TaskTable.css --- */
+
+/* Container */
+/* .task-table-container {
+  background-color: #fce023;
+  padding: 2rem;
+  border-radius: 16px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  color: #000;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.heading {
+  text-align: center;
+  margin-bottom: 1rem;
+  color: #6b6f1d;
+}
+
+.task-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.task-table th,
+.task-table td {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ccc;
+  text-align: left;
+}
+
+.badge {
+  padding: 0.3rem 0.6rem;
+  border-radius: 12px;
+  font-weight: bold;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.badge.pending {
+  background-color: #ffed8b;
+  color: #6b6f1d;
+}
+
+.badge.completed {
+  background-color: #6b6f1d;
+  color: #fff;
+}
+
+.assign-btn {
+  margin-top: 0.3rem;
+  margin-left: 0.5rem;
+  padding: 0.25rem 0.5rem;
+  background: #000;
+  color: #fce023;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.75rem;
+}
+
+.assign-popup {
+  position: absolute;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 0.5rem;
+  margin-top: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.assign-popup div {
+  padding: 0.3rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.assign-popup div:hover {
+  background-color: #fce023;
+  color: #000;
+}
+
+.floating-btn {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  background: #000;
+  color: #fce023;
+  border: none;
+  padding: 0.9rem 1.1rem;
+  font-size: 1.25rem;
+  border-radius: 50%;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 20;
+}
+
+.modal-content {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 16px;
+  width: 90%;
+  max-width: 400px;
+  position: relative;
+}
+
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.modal-content input,
+.modal-content textarea {
+  width: 100%;
+  margin: 0.5rem 0;
+  padding: 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  font-size: 1rem;
+}
+
+.submit-btn {
+  background: #6b6f1d;
+  color: #fff;
+  padding: 0.75rem;
+  width: 100%;
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+  margin-top: 1rem;
+} */
+
+
+
+/* Layout container */
+.task-table-container {
+  background: linear-gradient(145deg, #fdf189, #fce023);
+  padding: 24px;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  font-family: 'Segoe UI', sans-serif;
+  overflow-x: auto;
+  max-width: 100%;
+  position: relative;
+}
+
+/* Header */
+.task-table-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  margin-bottom: 24px;
+}
+
+.task-table-header h2 {
+  font-size: 26px;
+  font-weight: bold;
+  color: #000;
+  margin-bottom: 8px;
+}
+
+/* Filter and sort */
+.task-filter-sort {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.task-filter-sort select {
+  padding: 10px 14px;
+  border-radius: 12px;
+  border: none;
+  background-color: #fff;
+  font-size: 14px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+}
+
+.task-filter-sort select:hover {
+  background-color: #fdf189;
+}
+
+/* Table */
+.task-table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 12px;
+}
+
+.task-table th,
+.task-table td {
+  padding: 14px 16px;
+  text-align: left;
+  font-size: 14px;
+}
+
+.task-table th {
+  background-color: #6B6F1D;
+  color: #fff;
+  border-radius: 12px 12px 0 0;
+}
+
+.task-table td {
+  background-color: #fff;
+  color: #000;
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.06);
+}
+
+/* Status badge */
+.task-badge {
+  padding: 6px 12px;
+  font-size: 13px;
+  font-weight: 600;
+  border-radius: 12px;
+  display: inline-block;
+  text-transform: capitalize;
+}
+
+.status-completed {
+  background-color: #6B6F1D;
+  color: #fff;
+}
+
+.status-pending {
+  background-color: #000;
+  color: #fce023;
+}
+
+.status-inprogress {
+  background-color: #f59e0b;
+  color: #fff;
+}
+
+/* Assign Button */
+.assign-btn {
+  padding: 6px 12px;
+  background-color: #fce023;
+  color: #000;
+  border: 1px solid #6B6F1D;
+  border-radius: 8px;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.assign-btn:hover {
+  background-color: #6B6F1D;
+  color: #fff;
+}
+
+/* Assign Popup */
+.assign-popup {
+  position: absolute;
+  background-color: #fff;
+  border: 1px solid #ddd;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+  width: 200px;
+  z-index: 100;
+}
+
+.assign-popup ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.assign-popup li {
+  padding: 10px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: background 0.2s;
+  border-radius: 8px;
+}
+
+.assign-popup li:hover {
+  background-color: #fdf189;
+}
+
+/* Floating Add Button */
+.fab-button {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  width: 64px;
+  height: 64px;
+  background-color: #6B6F1D;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  font-size: 32px;
+  cursor: pointer;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.3);
+  transition: background 0.3s;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fab-button:hover {
+  background-color: #000;
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  width: 92%;
+  max-width: 440px;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25);
+}
+
+.modal h3 {
+  font-size: 22px;
+  color: #000;
+  margin-bottom: 16px;
+}
+
+.modal form label {
+  display: block;
+  margin-top: 14px;
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.modal form input,
+.modal form textarea,
+.modal form select {
+  width: 100%;
+  padding: 12px;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+  margin-top: 6px;
+}
+
+.modal form button {
+  margin-top: 18px;
+  padding: 12px;
+  background-color: #6B6F1D;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.modal form button:hover {
+  background-color: #000;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 600px) {
+  .task-table-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .task-filter-sort {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .fab-button {
+    width: 52px;
+    height: 52px;
+    font-size: 26px;
+  }
+}

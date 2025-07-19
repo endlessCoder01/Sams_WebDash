@@ -1,0 +1,112 @@
+.news-container {
+  background: linear-gradient(135deg, #6B6F1D, #000000);
+  padding: 24px;
+  border-radius: 16px;
+  color: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+  max-width: 100%;
+  overflow: hidden;
+}
+
+.news-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.news-header h2 {
+  color: #FCE023;
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin: 0;
+}
+
+.filters select {
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: none;
+  font-weight: 600;
+  background-color: #FCE023;
+  color: #000;
+  margin-top: 10px;
+  margin-right: 4px;
+}
+
+.slide-card {
+  background-color: #272727;
+  border-radius: 14px;
+  padding: 20px;
+  color: #fff;
+  margin: 0 12px;
+  min-height: 250px;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
+
+.slide-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 8px 20px rgba(252, 224, 35, 0.4);
+}
+
+.slide-card.warning {
+  background: #2c0000;
+  border-left: 5px solid red;
+}
+
+.slide-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #FCE023;
+  margin-bottom: 10px;
+}
+
+.slide-desc {
+  font-size: 0.95rem;
+  color: #e2e2e2;
+  line-height: 1.5;
+  margin-bottom: 12px;
+  flex-grow: 1;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+}
+
+.slide-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.85rem;
+}
+
+.read-link {
+  color: #FCE023;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.read-link:hover {
+  color: #fff;
+}
+
+.source-name {
+  color: #aaa;
+  font-style: italic;
+}
+
+.error-text {
+  background-color: #400000;
+  color: #ff4d4d;
+  padding: 14px;
+  border-radius: 10px;
+  text-align: center;
+  font-weight: bold;
+  margin-top: 20px;
+}

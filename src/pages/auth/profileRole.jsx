@@ -5,10 +5,17 @@ import Heading from "../../components/headings/Heading";
 import Button from "../../components/buttons/Button";
 import CustomDropdown from "../../components/input/customdropdown";
 import ImageUploadPreview from "../../components/input/ImageUploads";
+import { useNavigate } from "react-router-dom";
 
 const ProfileRole = () => {
   const [selectedRole, setSelectedRole] = useState("");
   const [profileImage, setProfileImage] = useState(null);
+
+  const navigate = useNavigate()
+const SignUp = () => {
+
+}
+
 
   return (
     <div className="signup-root">
@@ -19,8 +26,8 @@ const ProfileRole = () => {
       >
         <Heading text="Sign Up" id="signup-heading" />
         <form autoComplete="off" className="signup-form">
+            <label className="dropdown-label">Select Profile Picture</label>
           <ImageUploadPreview onImageSelect={setProfileImage} />
-          <Input type="text" hold="Name" autoFocus autoComplete="name" />
           <CustomDropdown
             label="Select Role"
             name="role"
@@ -29,10 +36,10 @@ const ProfileRole = () => {
             options={[
               { value: "farmer", label: "Farmer" },
               { value: "agronomist", label: "Agronomist" },
-              { value: "admin", label: "Admin" },
+            //   { value: "admin", label: "Admin" },
             ]}
           />
-          <Button name="Sign Up" type="submit" />
+          <Button name="Sign Up" click={SignUp} />
         </form>
       </div>
     </div>

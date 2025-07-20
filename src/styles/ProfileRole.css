@@ -40,6 +40,12 @@
   position: relative;
 }
 
+.dropdown-label {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
 .signup-card {
   width: 95%;
   max-width: 410px;

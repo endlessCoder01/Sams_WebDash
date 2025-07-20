@@ -1,0 +1,32 @@
+.dropdown-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  width: 100%;
+}
+
+.dropdown-label {
+  color: var(--text);
+  font-weight: 500;
+  font-size: 0.95rem;
+}
+
+.dropdown-select {
+  appearance: none;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1.5px solid var(--primary-green);
+  border-radius: 1rem;
+  background: var(--card-glass);
+  color: var(--text);
+  font-size: 1rem;
+  box-shadow: var(--shadow);
+  backdrop-filter: var(--blur);
+  transition: all 0.3s ease;
+}
+
+.dropdown-select:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: var(--focus-ring);
+}

@@ -1,15 +1,16 @@
 import React from "react";
 import "../../styles/Input.css";
 
-const Input = (props) => (
+const Input = ({ type, hold, changed, ...rest }) => (
   <div className="input-group">
     <input
-      type={props.type}
-      placeholder={props.hold}
+      type={type}
+      placeholder={hold}
+      aria-label={hold}
       className="input-element"
-      aria-label={props.hold}
+      onChange={changed}
       required
-      {...props}
+      {...rest}  
     />
   </div>
 );

@@ -9,6 +9,7 @@
   color: var(--text);
   font-weight: 500;
   font-size: 0.95rem;
+  margin: 5,
 }
 
 .dropdown-select {

@@ -36,7 +36,7 @@ const SignUp = () => {
   }
 
   const NextPage = () => {
-    const details = [name, email, password];
+    const details = {name, email, password};
     localStorage.setItem('info',  JSON.stringify(details))
     navigate("/signup_profile_role");
   };

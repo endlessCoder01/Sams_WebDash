@@ -15,7 +15,9 @@ const ProfileRole = () => {
   const [profileImage, setProfileImage] = useState(null);
 
   const navigate = useNavigate();
-  const SignUp = () => {};
+  const SignUp = async() => {
+    await createUser();
+  };
 
   const handleImageUpload = async (imageUri) => {
     console.log("Image URI:", imageUri);
@@ -59,8 +61,9 @@ const ProfileRole = () => {
   const createUser = async () => {
     let info = localStorage.getItem("info");
     const userInfo = await JSON.parse(info);
+    console.log(userInfo);
 
-    const profile = await handleImageUpload(profileImage);
+    // const profile = await handleImageUpload(profileImage);
     const newUser = {
       name: userInfo.name,
       email: userInfo.email,
@@ -68,7 +71,7 @@ const ProfileRole = () => {
       phone_number: contact,
       home_address: address,
       role: selectedRole,
-      profile_picture: profile,
+      // profile_picture: profile,
     };
 
     console.log("Going from page 3", newUser);
@@ -80,13 +83,14 @@ const ProfileRole = () => {
         },
         body: JSON.stringify(newUser),
       });
+            console.log("honai", response);
+
 
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to create customer details: ${errorText}`);
       }
 
-      console.log(response);
     } catch (error) {
       console.error()
     }

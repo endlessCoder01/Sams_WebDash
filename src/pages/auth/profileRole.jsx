@@ -93,25 +93,54 @@ const ProfileRole = () => {
   //   }
   // };
 
-  const handleImageUpload = async (imageUri) => {
-  console.log("Image URI:", imageUri);
+//   const handleImageUpload = async (imageUri) => {
+//   console.log("Image URI:", imageUri);
 
-  // 🛡️ Ensure it's a string
-  const uri = typeof imageUri === "string" ? imageUri : imageUri?.uri;
+//   // 🛡️ Ensure it's a string
+//   const uri = typeof imageUri === "string" ? imageUri : imageUri?.uri;
 
-  if (!uri) {
-    throw new Error("Invalid image URI");
+//   if (!uri) {
+//     throw new Error("Invalid image URI");
+//   }
+
+//   const formData = new FormData();
+//   const fileName = uri.split("/").pop();
+//   const type = `image/${fileName.split(".").pop()}`;
+
+//   formData.append("image", {
+//     uri: uri,
+//     name: fileName,
+//     type: type,
+//   });
+
+//   try {
+//     const response = await fetch(`${API}/uploads`, {
+//       method: "POST",
+//       body: formData,
+//     });
+
+//     if (!response.ok) {
+//       const errorText = await response.text();
+//       throw new Error(`Upload failed: ${errorText}`);
+//     }
+
+//     const data = await response.json();
+//     return data.path;
+//   } catch (error) {
+//     console.log("Upload error:", error);
+//     throw new Error("Failed to upload image");
+//   }
+// };
+
+const handleImageUpload = async (file) => {
+  console.log("Image URI (File):", file);
+
+  if (!file || !(file instanceof File)) {
+    throw new Error("Invalid image file");
   }
 
   const formData = new FormData();
-  const fileName = uri.split("/").pop();
-  const type = `image/${fileName.split(".").pop()}`;
-
-  formData.append("image", {
-    uri: uri,
-    name: fileName,
-    type: type,
-  });
+  formData.append("image", file); // Directly use the File object
 
   try {
     const response = await fetch(`${API}/uploads`, {
@@ -125,13 +154,12 @@ const ProfileRole = () => {
     }
 
     const data = await response.json();
-    return data.path;
+    return data.path; // adjust this based on your backend response
   } catch (error) {
-    console.log("Upload error:", error);
+    console.error("Upload error:", error);
     throw new Error("Failed to upload image");
   }
 };
-
 
 
 
@@ -153,7 +181,7 @@ const createUser = async () => {
   console.log("Going from page 3", newUser);
 
   try {
-    const response = await fetch(`${API_URL}/auth/register`, {
+    const response = await fetch(`${API}/auth/register`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

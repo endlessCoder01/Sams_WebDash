@@ -140,7 +140,7 @@ const handleImageUpload = async (file) => {
   }
 
   const formData = new FormData();
-  formData.append("image", file); // Directly use the File object
+  formData.append("image", file); 
 
   try {
     const response = await fetch(`${API}/uploads`, {

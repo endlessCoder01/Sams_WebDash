@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Login from "./pages/auth/login";
 import SignUp from "./pages/auth/signUp";
 import ProfileRole from "./pages/auth/profileRole";
+import TodayActivityCard from "./components/activity/activitycard";
 
 
 function App() {
@@ -10,6 +11,7 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
+          <Route path="/activity" element={<TodayActivityCard />} />
           <Route path="/signup_profile_role" element={<ProfileRole />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/" element={<Login />} />

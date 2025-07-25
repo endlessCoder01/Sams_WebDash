@@ -1,0 +1,84 @@
+/* Floating circular menu button */
+.floating-navbar {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 2000;
+}
+
+.menu-button {
+  background-color: rgba(107, 111, 29, 0.75);
+  backdrop-filter: blur(8px);
+  border: none;
+  padding: 12px 14px;
+  font-size: 1.4rem;
+  border-radius: 50%;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.25);
+  color: #FCE023;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.menu-button:hover {
+  background-color: rgba(107, 111, 29, 0.9);
+  transform: scale(1.05);
+}
+
+/* Slide-out menu adjustments */
+.slide-menu {
+  position: fixed;
+  top: 0;
+  left: -280px; /* adjusted from -260px */
+  height: 100%;
+  width: 280px; /* slightly wider */
+  background: rgba(0, 0, 0, 0.85); /* deeper transparency */
+  backdrop-filter: blur(12px);
+  color: #fff;
+  padding: 30px 20px;
+  box-sizing: border-box;
+  z-index: 1999;
+  transition: left 0.4s ease;
+  border-top-right-radius: 25px;
+  border-bottom-right-radius: 25px;
+  border-left: 3px solid #6B6F1D;
+}
+
+.slide-menu.open {
+  left: 0;
+}
+
+/* Close button */
+.close-button {
+  background: none;
+  border: none;
+  font-size: 1.4rem;
+  color: #FCE023;
+  cursor: pointer;
+  margin-bottom: 30px;
+}
+
+/* Nav list */
+.slide-menu ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.slide-menu li {
+  margin: 22px 0;
+}
+
+.slide-menu li a {
+  text-decoration: none;
+  color: #FCE023;
+  font-size: 1.15rem;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.25s ease;
+}
+
+.slide-menu li a:hover {
+  color: #ffffff;
+  transform: translateX(6px);
+}

@@ -5,12 +5,14 @@ import SignUp from "./pages/auth/signUp";
 import ProfileRole from "./pages/auth/profileRole";
 import TodayActivityCard from "./components/activity/activitycard";
 import HomePage from "./pages/main/farmer/home";
+import Navbar from "./components/navbars/farmernav";
 
 
 function App() {
   return (
     <div className="App">
       <Router>
+        <Navbar/>
         <Routes>
           <Route path="/home" element={<HomePage />} />
           <Route path="/activity" element={<TodayActivityCard />} />

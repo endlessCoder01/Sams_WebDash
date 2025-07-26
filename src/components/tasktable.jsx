@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import "../styles/TaskTable.css";
 import { FaUserCircle, FaSort, FaFilter } from "react-icons/fa";
-import { MdPending, MdDone } from "react-icons/md";
+import { MdPending, MdDone, MdCancel } from "react-icons/md";
 import EditTaskModal from "./modals/editTask";
 
 const TaskTable = () => {
@@ -42,6 +42,8 @@ const TaskTable = () => {
 
         const taskData = await taskRes.json();
         const userData = await userRes.json();
+
+        console.log("tasks", taskData);
 
         setTasks(Array.isArray(taskData) ? taskData : [taskData]); // safety
         setUsers(Array.isArray(userData) ? userData : [userData]);
@@ -92,6 +94,7 @@ const TaskTable = () => {
             <option value="All">All</option>
             <option value="pending">Pending</option>
             <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
           </select>
         </div>
 
@@ -128,12 +131,16 @@ const TaskTable = () => {
           </tr>
         </thead>
         <tbody>
-          {sortedTasks.map((task) => (
-            <tr key={task.task_id}>
-              <td>
-                {getUserName(task.assigned_to) || <em>Unassigned</em>}
-                {!task.assigned_to &&
-                  task.status.toLowerCase() === "pending" && (
+          {sortedTasks.map((task) => {
+            const isCancelled = task.status.toLowerCase() === "cancelled";
+            const isUnassigned = !task.assigned_to;
+
+            return (
+              <tr key={task.task_id}>
+                <td>
+                  {getUserName(task.assigned_to) || <em>Unassigned</em>}
+
+                  {isUnassigned && !isCancelled && (
                     <>
                       <button
                         className="assign-btn"
@@ -157,31 +164,37 @@ const TaskTable = () => {
                       )}
                     </>
                   )}
-              </td>
-              <td>{task.task_description}</td>
-              <td>{new Date(task.scheduled_date).toLocaleDateString()}</td>
-              <td>
-                <span className={`badge ${task.status.toLowerCase()}`}>
-                  {task.status.toLowerCase() === "pending" ? (
-                    <MdPending />
-                  ) : (
-                    <MdDone />
-                  )}{" "}
-                  {task.status}
-                </span>
-              </td>
-              <td>{new Date(task.created_at).toLocaleDateString()}</td>
-              <td>
-                <button
-                  className="edit-btn"
-                  onClick={() => setEditingTask(task)}
-                >
-                  Edit
-                </button>{" "}
-                <button className="delete-btn">Delete</button>
-              </td>
-            </tr>
-          ))}
+                </td>
+
+                <td>{task.task_description}</td>
+                <td>{new Date(task.scheduled_date).toLocaleDateString()}</td>
+
+                <td>
+                  <span className={`badge ${task.status.toLowerCase()}`}>
+                    {task.status.toLowerCase() === "pending" && <MdPending />}
+                    {task.status.toLowerCase() === "completed" && <MdDone />}
+                    {task.status.toLowerCase() === "cancelled" && (
+                      <MdCancel />
+                    )}{" "}
+                    {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
+                  </span>
+                </td>
+
+                <td>{new Date(task.created_at).toLocaleDateString()}</td>
+                <td>
+                  {!isCancelled && (
+                    <button
+                      className="edit-btn"
+                      onClick={() => setEditingTask(task)}
+                    >
+                      Edit
+                    </button>
+                  )}
+                  <button className="delete-btn">Delete</button>
+                </td>
+              </tr>
+            );
+          })}
         </tbody>
       </table>
     </div>

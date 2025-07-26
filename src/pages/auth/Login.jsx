@@ -5,7 +5,7 @@ import Heading from "../../components/headings/Heading";
 import Button from "../../components/buttons/Button";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
-import {API} from "../../services/config"
+import { API } from "../../services/config";
 
 const Login = () => {
   const [email, setEmail] = useState();
@@ -15,16 +15,14 @@ const Login = () => {
 
   const changedEmail = (event) => {
     setEmail(event.target.value);
-  }
+  };
 
   const changedPass = (event) => {
     setPassword(event.target.value);
-  }
-
+  };
 
   const Login = async () => {
     try {
-  
       const response = await fetch(`${API}/auth/login`, {
         method: "POST",
         headers: {
@@ -38,7 +36,6 @@ const Login = () => {
 
       const result = await response.json();
       if (response.ok && result) {
-        console.log("token", result);
         localStorage.setItem("tokens", JSON.stringify(result));
         await Swal.fire(
           "Success!",
@@ -46,7 +43,8 @@ const Login = () => {
           "success"
         );
 
-        // navigate("");
+        localStorage.setItem("token", JSON.stringify(result.token.token));
+        navigate("/home");
       } else {
         await Swal.fire(
           "Error!",
@@ -72,8 +70,13 @@ const Login = () => {
         aria-labelledby="signup-heading"
       >
         <Heading text="Login" id="signup-heading" />
-        <Input type="email" hold="Email" autoComplete="email" changed={changedEmail} />
-        <Input type="password" hold="Password" changed={changedPass}/>
+        <Input
+          type="email"
+          hold="Email"
+          autoComplete="email"
+          changed={changedEmail}
+        />
+        <Input type="password" hold="Password" changed={changedPass} />
         <a href="#">Forgot Passsword</a>
         <Button name="Login" click={Login} />
         <p>

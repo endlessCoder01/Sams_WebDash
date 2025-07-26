@@ -6,6 +6,7 @@ import ProfileRole from "./pages/auth/profileRole";
 import TodayActivityCard from "./components/activity/activitycard";
 import HomePage from "./pages/main/farmer/home";
 import Navbar from "./components/navbars/farmernav";
+import TaskTable from "./components/tasktable";
 
 
 function App() {
@@ -14,6 +15,7 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
+          <Route path="/tasks" element={<TaskTable />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/activity" element={<TodayActivityCard />} />
           <Route path="/signup_profile_role" element={<ProfileRole />} />

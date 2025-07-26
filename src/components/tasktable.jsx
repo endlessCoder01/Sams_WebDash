@@ -1,77 +1,84 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../styles/TaskTable.css";
-import { FaPlus, FaUserCircle, FaSort, FaFilter } from "react-icons/fa";
+import { FaUserCircle, FaSort, FaFilter } from "react-icons/fa";
 import { MdPending, MdDone } from "react-icons/md";
-import { IoMdClose } from "react-icons/io";
-
-const dummyTasks = [
-  {
-    id: 1,
-    assignedTo: "Alice",
-    description: "Irrigate maize field",
-    scheduledDate: "2025-07-20",
-    status: "Pending",
-    createdAt: "2025-07-18",
-  },
-  {
-    id: 2,
-    assignedTo: "Bob",
-    description: "Check fertilizer levels",
-    scheduledDate: "2025-07-21",
-    status: "Completed",
-    createdAt: "2025-07-17",
-  },
-];
-
-const availableUsers = ["Alice", "Bob", "Charlie"];
 
 const TaskTable = () => {
-  const [tasks, setTasks] = useState(dummyTasks);
-  const [showModal, setShowModal] = useState(false);
-  const [newTask, setNewTask] = useState({
-    assignedTo: "",
-    description: "",
-    scheduledDate: "",
-    status: "Pending",
-  });
-  const [showAssignPopup, setShowAssignPopup] = useState(null);
+  const [tasks, setTasks] = useState([]);
+  const [users, setUsers] = useState([]);
   const [filterStatus, setFilterStatus] = useState("All");
   const [sortAsc, setSortAsc] = useState(true);
+  const [showAssignPopup, setShowAssignPopup] = useState(null);
 
-  const handleCreateTask = () => {
-    setTasks([
-      ...tasks,
-      {
-        ...newTask,
-        id: tasks.length + 1,
-        createdAt: new Date().toISOString().split("T")[0],
-      },
-    ]);
-    setShowModal(false);
-    setNewTask({ assignedTo: "", description: "", scheduledDate: "", status: "Pending" });
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const tokenFromL = localStorage.getItem("token");
+        const token = JSON.parse(tokenFromL);
+
+        if (!token) {
+          console.error("No token found in localStorage");
+          return;
+        }
+
+        const headers = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+
+        const taskRes = await fetch("http://localhost:3000/task", { headers });
+        const userRes = await fetch("http://localhost:3000/users", { headers });
+
+        if (!taskRes.ok || !userRes.ok) {
+          console.error(
+            "Failed to fetch: Task or User",
+            await taskRes.text(),
+            await userRes.text()
+          );
+          return;
+        }
+
+        const taskData = await taskRes.json();
+        const userData = await userRes.json();
+
+        setTasks(Array.isArray(taskData) ? taskData : [taskData]); // safety
+        setUsers(Array.isArray(userData) ? userData : [userData]);
+      } catch (error) {
+        console.error("Failed to fetch data:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const getUserName = (userId) => {
+    const user = users.find((u) => u.user_id === userId);
+    return user ? user.name : "Unknown";
   };
 
-  const assignUser = (taskId, user) => {
-    const updated = tasks.map((t) =>
-      t.id === taskId ? { ...t, assignedTo: user } : t
+  const assignUser = (taskId, userId) => {
+    const updated = tasks.map((task) =>
+      task.task_id === taskId ? { ...task, assigned_to: userId } : task
     );
     setTasks(updated);
     setShowAssignPopup(null);
   };
 
   const filteredTasks = tasks.filter(
-    (t) => filterStatus === "All" || t.status === filterStatus
+    (t) =>
+      filterStatus === "All" ||
+      t.status.toLowerCase() === filterStatus.toLowerCase()
   );
 
   const sortedTasks = [...filteredTasks].sort((a, b) => {
-    const dateA = new Date(a.scheduledDate);
-    const dateB = new Date(b.scheduledDate);
+    const dateA = new Date(a.scheduled_date);
+    const dateB = new Date(b.scheduled_date);
     return sortAsc ? dateA - dateB : dateB - dateA;
   });
 
   return (
     <div className="task-table-container">
-      <h2 className="heading">📝 Task Schedule</h2>
+      <h2 className="heading">📋 Farm Task Schedule</h2>
 
       <div className="controls">
         <div className="filters">
@@ -81,8 +88,8 @@ const TaskTable = () => {
             value={filterStatus}
           >
             <option value="All">All</option>
-            <option value="Pending">Pending</option>
-            <option value="Completed">Completed</option>
+            <option value="pending">Pending</option>
+            <option value="completed">Completed</option>
           </select>
         </div>
 
@@ -99,28 +106,32 @@ const TaskTable = () => {
             <th>Scheduled Date</th>
             <th>Status</th>
             <th>Created At</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
           {sortedTasks.map((task) => (
-            <tr key={task.id}>
-              <td>{task.assignedTo || <em>Unassigned</em>}</td>
-              <td>{task.description}</td>
-              <td>{task.scheduledDate}</td>
+            <tr key={task.task_id}>
               <td>
-                <span className={`badge ${task.status.toLowerCase()}`}>
-                  {task.status === "Pending" ? <MdPending /> : <MdDone />} {task.status}
-                </span>
-                {task.status === "Pending" && (
+                {getUserName(task.assigned_to) || <em>Unassigned</em>}
+                {!task.assigned_to && task.status.toLowerCase() === "pending" && (
                   <>
-                    <button className="assign-btn" onClick={() => setShowAssignPopup(task.id)}>
+                    <button
+                      className="assign-btn"
+                      onClick={() => setShowAssignPopup(task.task_id)}
+                    >
                       Assign
                     </button>
-                    {showAssignPopup === task.id && (
+                    {showAssignPopup === task.task_id && (
                       <div className="assign-popup">
-                        {availableUsers.map((user) => (
-                          <div key={user} onClick={() => assignUser(task.id, user)}>
-                            <FaUserCircle /> {user}
+                        {users.map((user) => (
+                          <div
+                            key={user.user_id}
+                            onClick={() =>
+                              assignUser(task.task_id, user.user_id)
+                            }
+                          >
+                            <FaUserCircle /> {user.name}
                           </div>
                         ))}
                       </div>
@@ -128,43 +139,27 @@ const TaskTable = () => {
                   </>
                 )}
               </td>
-              <td>{task.createdAt}</td>
+              <td>{task.task_description}</td>
+              <td>{new Date(task.scheduled_date).toLocaleDateString()}</td>
+              <td>
+                <span className={`badge ${task.status.toLowerCase()}`}>
+                  {task.status.toLowerCase() === "pending" ? (
+                    <MdPending />
+                  ) : (
+                    <MdDone />
+                  )}{" "}
+                  {task.status}
+                </span>
+              </td>
+              <td>{new Date(task.created_at).toLocaleDateString()}</td>
+              <td>
+                <button className="edit-btn">Edit</button>{" "}
+                <button className="delete-btn">Delete</button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <button className="floating-btn" onClick={() => setShowModal(true)}>
-        <FaPlus />
-      </button>
-
-      {showModal && (
-        <div className="modal">
-          <div className="modal-content">
-            <button className="close-btn" onClick={() => setShowModal(false)}>
-              <IoMdClose />
-            </button>
-            <h3>Create Task</h3>
-            <input
-              type="text"
-              placeholder="Assigned To"
-              value={newTask.assignedTo}
-              onChange={(e) => setNewTask({ ...newTask, assignedTo: e.target.value })}
-            />
-            <textarea
-              placeholder="Task Description"
-              value={newTask.description}
-              onChange={(e) => setNewTask({ ...newTask, description: e.target.value })}
-            ></textarea>
-            <input
-              type="date"
-              value={newTask.scheduledDate}
-              onChange={(e) => setNewTask({ ...newTask, scheduledDate: e.target.value })}
-            />
-            <button className="submit-btn" onClick={handleCreateTask}>Add Task</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 };

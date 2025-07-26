@@ -29,8 +29,8 @@ const Navbar = () => {
           <FontAwesomeIcon icon={faTimes} />
         </button>
         <ul>
-          <li><a href="#"><FontAwesomeIcon icon={faHome} /> Home</a></li>
-          <li><a href="#"><FontAwesomeIcon icon={faTasks} /> Tasks</a></li>
+          <li><a href="/home"><FontAwesomeIcon icon={faHome} /> Home</a></li>
+          <li><a href="/tasks"><FontAwesomeIcon icon={faTasks} /> Tasks</a></li>
           <li><a href="#"><FontAwesomeIcon icon={faBell} /> Alerts</a></li>
           <li><a href="#"><FontAwesomeIcon icon={faUser} /> Profile</a></li>
           <li><a href="#"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</a></li>

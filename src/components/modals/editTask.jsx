@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import "../styles/EditTaskModal.css";
+import "../../styles/EditTaskModal.css";
 
 
 const EditTaskModal = ({ task, onSave, onCancel }) => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import "../styles/TaskTable.css";
 import { FaUserCircle, FaSort, FaFilter } from "react-icons/fa";
 import { MdPending, MdDone } from "react-icons/md";
+import EditTaskModal from "./modals/editTask";
 
 const TaskTable = () => {
   const [tasks, setTasks] = useState([]);
@@ -9,6 +10,7 @@ const TaskTable = () => {
   const [filterStatus, setFilterStatus] = useState("All");
   const [sortAsc, setSortAsc] = useState(true);
   const [showAssignPopup, setShowAssignPopup] = useState(null);
+  const [editingTask, setEditingTask] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -98,6 +100,22 @@ const TaskTable = () => {
         </div>
       </div>
 
+      {editingTask && (
+        <EditTaskModal
+          task={editingTask}
+          onSave={(updatedTask) => {
+            // Update local state
+            const updatedTasks = tasks.map((t) =>
+              t.task_id === updatedTask.task_id ? updatedTask : t
+            );
+            setTasks(updatedTasks);
+            setEditingTask(null);
+            // Optionally send PATCH request here
+          }}
+          onCancel={() => setEditingTask(null)}
+        />
+      )}
+
       <table className="task-table">
         <thead>
           <tr>
@@ -114,30 +132,31 @@ const TaskTable = () => {
             <tr key={task.task_id}>
               <td>
                 {getUserName(task.assigned_to) || <em>Unassigned</em>}
-                {!task.assigned_to && task.status.toLowerCase() === "pending" && (
-                  <>
-                    <button
-                      className="assign-btn"
-                      onClick={() => setShowAssignPopup(task.task_id)}
-                    >
-                      Assign
-                    </button>
-                    {showAssignPopup === task.task_id && (
-                      <div className="assign-popup">
-                        {users.map((user) => (
-                          <div
-                            key={user.user_id}
-                            onClick={() =>
-                              assignUser(task.task_id, user.user_id)
-                            }
-                          >
-                            <FaUserCircle /> {user.name}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
+                {!task.assigned_to &&
+                  task.status.toLowerCase() === "pending" && (
+                    <>
+                      <button
+                        className="assign-btn"
+                        onClick={() => setShowAssignPopup(task.task_id)}
+                      >
+                        Assign
+                      </button>
+                      {showAssignPopup === task.task_id && (
+                        <div className="assign-popup">
+                          {users.map((user) => (
+                            <div
+                              key={user.user_id}
+                              onClick={() =>
+                                assignUser(task.task_id, user.user_id)
+                              }
+                            >
+                              <FaUserCircle /> {user.name}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </>
+                  )}
               </td>
               <td>{task.task_description}</td>
               <td>{new Date(task.scheduled_date).toLocaleDateString()}</td>
@@ -153,7 +172,12 @@ const TaskTable = () => {
               </td>
               <td>{new Date(task.created_at).toLocaleDateString()}</td>
               <td>
-                <button className="edit-btn">Edit</button>{" "}
+                <button
+                  className="edit-btn"
+                  onClick={() => setEditingTask(task)}
+                >
+                  Edit
+                </button>{" "}
                 <button className="delete-btn">Delete</button>
               </td>
             </tr>

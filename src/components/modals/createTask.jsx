@@ -1,34 +1,50 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import "./Modal.css"; 
+import "./Modal.css";
 
 const CreateTaskModal = ({ onClose, onTaskCreated }) => {
   const [users, setUsers] = useState([]);
+  const [farms, setFarms] = useState([]);
   const [task, setTask] = useState({
     task_description: "",
     scheduled_date: "",
     status: "pending",
     assigned_to: "",
+    farm_id: "", 
   });
 
+  // Fetch users and farms
   useEffect(() => {
-    const fetchUsers = async () => {
+    const fetchData = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("token"));
-        const res = await fetch("http://localhost:3000/users", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await res.json();
-        setUsers(Array.isArray(data) ? data : [data]);
+
+        const [usersRes, farmsRes] = await Promise.all([
+          fetch("http://localhost:3000/users", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }),
+          fetch("http://localhost:3000/farms", {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json",
+            },
+          }),
+        ]);
+
+        const usersData = await usersRes.json();
+        const farmsData = await farmsRes.json();
+
+        setUsers(Array.isArray(usersData) ? usersData : [usersData]);
+        setFarms(Array.isArray(farmsData) ? farmsData : [farmsData]);
       } catch (err) {
-        console.error("Failed to fetch users", err);
+        console.error("Failed to fetch users or farms", err);
       }
     };
 
-    fetchUsers();
+    fetchData();
   }, []);
 
   const handleChange = (e) => {
@@ -36,34 +52,42 @@ const CreateTaskModal = ({ onClose, onTaskCreated }) => {
     setTask((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    try {
-      const token = JSON.parse(localStorage.getItem("token"));
-      const res = await fetch("http://localhost:3000/task", {
-        method: "POST",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(task),
-      });
+  try {
+    const token = JSON.parse(localStorage.getItem("token"));
 
-      if (!res.ok) {
-        const message = await res.text();
-        throw new Error(message);
-      }
+    const payload = {
+      ...task,
+      assigned_to: task.assigned_to === "" ? null : parseInt(task.assigned_to),
+      farm_id: task.farm_id === "" ? null : parseInt(task.farm_id),
+    };
 
-      const createdTask = await res.json();
-      Swal.fire("Success!", "Task created successfully", "success");
-      onTaskCreated(createdTask);
-      onClose();
-    } catch (error) {
-      console.error("Create Error:", error.message);
-      Swal.fire("Error", "Could not create task", "error");
+    const res = await fetch("http://localhost:3000/task", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(payload),
+    });
+
+    if (!res.ok) {
+      const message = await res.text();
+      throw new Error(message);
     }
-  };
+
+    const createdTask = await res.json();
+    Swal.fire("Success!", "Task created successfully", "success");
+    onTaskCreated(createdTask);
+    onClose();
+  } catch (error) {
+    console.error("Create Error:", error.message);
+    Swal.fire("Error", error.message || "Could not create task", "error");
+  }
+};
+
 
   return (
     <div className="modal-backdrop">
@@ -105,6 +129,21 @@ const CreateTaskModal = ({ onClose, onTaskCreated }) => {
             {users.map((user) => (
               <option key={user.user_id} value={user.user_id}>
                 {user.name}
+              </option>
+            ))}
+          </select>
+
+          <label>Select Farm</label>
+          <select
+            name="farm_id"
+            value={task.farm_id}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Select a farm</option>
+            {farms.map((farm) => (
+              <option key={farm.farm_id} value={farm.farm_id}>
+                {farm.farm_name} - {farm.location}
               </option>
             ))}
           </select>

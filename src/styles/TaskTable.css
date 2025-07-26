@@ -511,6 +511,27 @@
   color: white;
 }
 
+.floating-add-button {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #6B6F1D;
+  color: white;
+  border: none;
+  padding: 15px 20px;
+  border-radius: 50%;
+  font-size: 24px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  transition: background-color 0.3s ease;
+}
+
+.floating-add-button:hover {
+  background-color: #555b13;
+}
+
+
 
 /* Responsive */
 @media (max-width: 768px) {

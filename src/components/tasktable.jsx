@@ -2,7 +2,9 @@ import React, { useState, useEffect } from "react";
 import "../styles/TaskTable.css";
 import { FaUserCircle, FaSort, FaFilter } from "react-icons/fa";
 import { MdPending, MdDone, MdCancel } from "react-icons/md";
+import Swal from "sweetalert2";
 import EditTaskModal from "./modals/editTask";
+import CreateTaskModal from "./modals/createTask";
 
 const TaskTable = () => {
   const [tasks, setTasks] = useState([]);
@@ -11,17 +13,13 @@ const TaskTable = () => {
   const [sortAsc, setSortAsc] = useState(true);
   const [showAssignPopup, setShowAssignPopup] = useState(null);
   const [editingTask, setEditingTask] = useState(null);
+  const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const tokenFromL = localStorage.getItem("token");
-        const token = JSON.parse(tokenFromL);
-
-        if (!token) {
-          console.error("No token found in localStorage");
-          return;
-        }
+        const token = JSON.parse(localStorage.getItem("token"));
+        if (!token) return console.error("No token found in localStorage");
 
         const headers = {
           Authorization: `Bearer ${token}`,
@@ -32,20 +30,14 @@ const TaskTable = () => {
         const userRes = await fetch("http://localhost:3000/users", { headers });
 
         if (!taskRes.ok || !userRes.ok) {
-          console.error(
-            "Failed to fetch: Task or User",
-            await taskRes.text(),
-            await userRes.text()
-          );
+          console.error("Failed to fetch Task or User");
           return;
         }
 
         const taskData = await taskRes.json();
         const userData = await userRes.json();
 
-        console.log("tasks", taskData);
-
-        setTasks(Array.isArray(taskData) ? taskData : [taskData]); // safety
+        setTasks(Array.isArray(taskData) ? taskData : [taskData]);
         setUsers(Array.isArray(userData) ? userData : [userData]);
       } catch (error) {
         console.error("Failed to fetch data:", error);
@@ -54,6 +46,39 @@ const TaskTable = () => {
 
     fetchData();
   }, []);
+
+  const deleteTask = async (taskId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+    });
+
+    if (!result.isConfirmed) return;
+
+    try {
+      const token = JSON.parse(localStorage.getItem("token"));
+
+      const res = await fetch(`http://localhost:3000/task/${taskId}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) throw new Error(await res.text());
+
+      setTasks((prev) => prev.filter((t) => t.task_id !== taskId));
+
+      Swal.fire("Deleted!", "Your task has been deleted.", "success");
+    } catch (err) {
+      console.error("Delete Error:", err.message);
+      Swal.fire("Error", "Failed to delete task", "error");
+    }
+  };
 
   const getUserName = (userId) => {
     const user = users.find((u) => u.user_id === userId);
@@ -83,7 +108,6 @@ const TaskTable = () => {
   return (
     <div className="task-table-container">
       <h2 className="heading">📋 Farm Task Schedule</h2>
-
       <div className="controls">
         <div className="filters">
           <FaFilter />
@@ -102,23 +126,25 @@ const TaskTable = () => {
           <FaSort /> Sort by Date {sortAsc ? "↑" : "↓"}
         </div>
       </div>
-
       {editingTask && (
         <EditTaskModal
           task={editingTask}
           onSave={(updatedTask) => {
-            // Update local state
             const updatedTasks = tasks.map((t) =>
               t.task_id === updatedTask.task_id ? updatedTask : t
             );
             setTasks(updatedTasks);
             setEditingTask(null);
-            // Optionally send PATCH request here
           }}
           onCancel={() => setEditingTask(null)}
         />
       )}
-
+      {showCreateModal && (
+        <CreateTaskModal
+          onClose={() => setShowCreateModal(false)}
+          onTaskCreated={(newTask) => setTasks((prev) => [...prev, newTask])}
+        />
+      )}
       <table className="task-table">
         <thead>
           <tr>
@@ -139,7 +165,6 @@ const TaskTable = () => {
               <tr key={task.task_id}>
                 <td>
                   {getUserName(task.assigned_to) || <em>Unassigned</em>}
-
                   {isUnassigned && !isCancelled && (
                     <>
                       <button
@@ -165,10 +190,8 @@ const TaskTable = () => {
                     </>
                   )}
                 </td>
-
                 <td>{task.task_description}</td>
                 <td>{new Date(task.scheduled_date).toLocaleDateString()}</td>
-
                 <td>
                   <span className={`badge ${task.status.toLowerCase()}`}>
                     {task.status.toLowerCase() === "pending" && <MdPending />}
@@ -179,7 +202,6 @@ const TaskTable = () => {
                     {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
                   </span>
                 </td>
-
                 <td>{new Date(task.created_at).toLocaleDateString()}</td>
                 <td>
                   {!isCancelled && (
@@ -190,13 +212,25 @@ const TaskTable = () => {
                       Edit
                     </button>
                   )}
-                  <button className="delete-btn">Delete</button>
+                  <button
+                    className="delete-btn"
+                    onClick={() => deleteTask(task.task_id)}
+                  >
+                    Delete
+                  </button>
                 </td>
               </tr>
             );
           })}
         </tbody>
       </table>
+      <button
+        className="floating-add-button"
+        onClick={() => setShowCreateModal(true)}
+        title="Add Task"
+      >
+        +
+      </button>{" "}
     </div>
   );
 };

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "./AllWorkers.css";
+import AddWorkerToFarm from "../../../components/modals/addworker";
 
 const AllWorkers = () => {
   const [workers, setWorkers] = useState([]);
+  const [showModal, setShowModal] = useState(false); // ✅ Modal toggle state
 
   const token = localStorage.getItem("token");
 
@@ -27,7 +29,7 @@ const AllWorkers = () => {
     };
 
     fetchWorkers();
-  }, []);
+  }, [showModal]); // ✅ Refresh on modal close
 
   return (
     <div className="workers-page">
@@ -66,6 +68,19 @@ const AllWorkers = () => {
           </div>
         ))}
       </div>
+
+      {/* ✅ Floating Button */}
+      <button className="floating-btn" onClick={() => setShowModal(true)}>+</button>
+
+      {/* ✅ Modal with background overlay */}
+      {showModal && (
+        <div className="modal-overlay">
+          <div className="modal-content">
+            <button className="close-modal" onClick={() => setShowModal(false)}>×</button>
+            <AddWorkerToFarm />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

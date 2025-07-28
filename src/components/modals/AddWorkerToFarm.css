@@ -1,0 +1,46 @@
+.add-worker-container {
+  background: #fff;
+  padding: 2rem;
+  max-width: 500px;
+  margin: 40px auto;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.add-worker-container h2 {
+  text-align: center;
+  color: #2a7f62;
+  margin-bottom: 1rem;
+}
+
+.add-worker-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.add-worker-form select,
+.add-worker-form input {
+  padding: 0.6rem;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.add-worker-form label {
+  font-weight: bold;
+  color: #444;
+}
+
+.submit-btn {
+  background-color: #2a7f62;
+  color: white;
+  border: none;
+  padding: 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.submit-btn:hover {
+  background-color: #246b52;
+}

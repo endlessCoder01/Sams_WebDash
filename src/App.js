@@ -7,6 +7,7 @@ import TodayActivityCard from "./components/activity/activitycard";
 import HomePage from "./pages/main/farmer/home";
 import Navbar from "./components/navbars/farmernav";
 import TaskTable from "./components/tasktable";
+import AllWorkers from "./pages/main/farmer/allworkers";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
+          <Route path="/workers" element={<AllWorkers />} />
           <Route path="/tasks" element={<TaskTable />} />
           <Route path="/home" element={<HomePage />} />
           <Route path="/activity" element={<TodayActivityCard />} />

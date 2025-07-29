@@ -1,0 +1,76 @@
+.alerts-container {
+  padding: 2rem;
+  font-family: sans-serif;
+  background: #fefefe;
+}
+
+h2 {
+  color: #6B6F1D;
+  margin-bottom: 1rem;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.filters input,
+.filters select {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.alerts-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: white;
+  border: 1px solid #ddd;
+}
+
+.alerts-table th,
+.alerts-table td {
+  padding: 10px;
+  border: 1px solid #ddd;
+  text-align: left;
+}
+
+.alerts-table th {
+  background-color: #FCE023;
+  color: #000;
+}
+
+.seen-btn {
+  background-color: #6B6F1D;
+  color: white;
+  padding: 5px 8px;
+  border: none;
+  margin-right: 4px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.cancel-btn {
+  background-color: orange;
+  color: white;
+  padding: 5px 8px;
+  border: none;
+  margin-right: 4px;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.delete-btn {
+  background-color: red;
+  color: white;
+  padding: 5px 8px;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+}
+
+.no-action {
+  color: #28a745;
+  font-weight: bold;
+}

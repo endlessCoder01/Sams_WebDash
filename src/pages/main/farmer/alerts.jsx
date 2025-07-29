@@ -116,6 +116,7 @@ const handleDelete = async (alertId) => {
   if (result.isConfirmed) {
     try {
       const response = await fetch(`http://localhost:3000/alert/${alertId}`, {
+        headers,
         method: "DELETE",
       });
 

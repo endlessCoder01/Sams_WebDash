@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
-import "./AlertsPage.css";
+import "./Alerts.css";
 
 const AlertsPage = () => {
   const [alerts, setAlerts] = useState([]);
@@ -21,13 +21,21 @@ const AlertsPage = () => {
 
   const fetchAlerts = async () => {
     try {
-      const res = await fetch("http://localhost:3000/alert/with_info", { headers });
+      const res = await fetch("http://localhost:3000/alert/with_info", {
+        headers,
+      });
       const data = await res.json();
 
-      // Temporary status tagging (mock)
       const statusedData = data.map((alert, index) => ({
         ...alert,
-        status: index === 0 ? "initiated" : index === 1 ? "cancelled" : "seen", // Mock status
+        status:
+          index === 0
+            ? "initiated"
+            : index === 1
+            ? "cancelled"
+            : index === 2
+            ? "missed"
+            : "seen",
       }));
 
       setAlerts(statusedData);
@@ -69,7 +77,9 @@ const AlertsPage = () => {
     if (confirm.isConfirmed) {
       // Simulate cancelling
       setAlerts((prev) =>
-        prev.map((a) => (a.alert_id === alert_id ? { ...a, status: "cancelled" } : a))
+        prev.map((a) =>
+          a.alert_id === alert_id ? { ...a, status: "cancelled" } : a
+        )
       );
       filterAlerts(search, filterType, filterSeverity);
       Swal.fire("Cancelled!", "The task has been cancelled.", "success");
@@ -113,13 +123,23 @@ const AlertsPage = () => {
           onChange={handleSearch}
         />
 
-        <select onChange={(e) => { setFilterType(e.target.value); filterAlerts(search, e.target.value, filterSeverity); }}>
+        <select
+          onChange={(e) => {
+            setFilterType(e.target.value);
+            filterAlerts(search, e.target.value, filterSeverity);
+          }}
+        >
           <option value="">All Types</option>
           <option value="water">Water</option>
           <option value="weeding">Weeding</option>
         </select>
 
-        <select onChange={(e) => { setFilterSeverity(e.target.value); filterAlerts(search, filterType, e.target.value); }}>
+        <select
+          onChange={(e) => {
+            setFilterSeverity(e.target.value);
+            filterAlerts(search, filterType, e.target.value);
+          }}
+        >
           <option value="">All Severity</option>
           <option value="info">Info</option>
           <option value="warning">Warning</option>
@@ -141,28 +161,63 @@ const AlertsPage = () => {
         </thead>
         <tbody>
           {filteredAlerts.length === 0 ? (
-            <tr><td colSpan="7">No alerts found.</td></tr>
+            <tr>
+              <td colSpan="7">No alerts found.</td>
+            </tr>
           ) : (
             filteredAlerts.map((alert) => (
-              <tr key={alert.alert_id}>
+              <tr
+                key={alert.alert_id}
+                className={alert.status === "missed" ? "missed-row" : ""}
+              >
                 <td>{alert.message}</td>
                 <td>{alert.type}</td>
                 <td>{alert.severity}</td>
                 <td>{alert.farm_name}</td>
                 <td>{alert.initiator_name}</td>
-                <td>{alert.status}</td>
+                <td>
+                  {alert.status === "missed" ? (
+                    <span style={{ color: "red", fontWeight: "bold" }}>
+                      Missed
+                    </span>
+                  ) : (
+                    alert.status
+                  )}
+                </td>
                 <td>
                   {alert.status === "initiated" && (
                     <>
-                      <button onClick={() => handleSeen(alert.alert_id)} className="seen-btn">Seen</button>
-                      <button onClick={() => handleCancel(alert.alert_id)} className="cancel-btn">Cancel</button>
-                      <button onClick={() => handleDelete(alert.alert_id)} className="delete-btn">Delete</button>
+                      <button
+                        onClick={() => handleSeen(alert.alert_id)}
+                        className="seen-btn"
+                      >
+                        Seen
+                      </button>
+                      <button
+                        onClick={() => handleCancel(alert.alert_id)}
+                        className="cancel-btn"
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        onClick={() => handleDelete(alert.alert_id)}
+                        className="delete-btn"
+                      >
+                        Delete
+                      </button>
                     </>
                   )}
-                  {alert.status === "cancelled" && (
-                    <button onClick={() => handleDelete(alert.alert_id)} className="delete-btn">Delete</button>
+                  {["cancelled", "missed"].includes(alert.status) && (
+                    <button
+                      onClick={() => handleDelete(alert.alert_id)}
+                      className="delete-btn"
+                    >
+                      Delete
+                    </button>
                   )}
-                  {alert.status === "seen" && <span className="no-action">✓</span>}
+                  {alert.status === "seen" && (
+                    <span className="no-action">✓</span>
+                  )}
                 </td>
               </tr>
             ))

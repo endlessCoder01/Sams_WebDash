@@ -8,6 +8,7 @@ import HomePage from "./pages/main/farmer/home";
 import Navbar from "./components/navbars/farmernav";
 import TaskTable from "./components/tasktable";
 import AllWorkers from "./pages/main/farmer/allworkers";
+import AlertsPage from "./pages/main/farmer/alerts";
 
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
+          <Route path="/alerts" element={<AlertsPage />} />
           <Route path="/workers" element={<AllWorkers />} />
           <Route path="/tasks" element={<TaskTable />} />
           <Route path="/home" element={<HomePage />} />

@@ -74,3 +74,6 @@ h2 {
   color: #28a745;
   font-weight: bold;
 }
+.missed-row {
+  background-color: #ffe5e5;
+}

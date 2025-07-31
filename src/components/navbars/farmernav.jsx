@@ -36,7 +36,7 @@ const Navbar = () => {
           <li><a href="/workers"><FontAwesomeIcon icon={faUserGroup} /> Employees</a></li>
           <li><a href="/alerts"><FontAwesomeIcon icon={faBell} /> Alerts</a></li>
           <li><a href="/soon"><FontAwesomeIcon icon={faPooStorm} /> Sensors</a></li>
-          <li><a href="#"><FontAwesomeIcon icon={faUser} /> Profile</a></li>
+          <li><a href="/profile"><FontAwesomeIcon icon={faUser} /> Profile</a></li>
           <li><a href="#"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</a></li>
         </ul>
       </div>

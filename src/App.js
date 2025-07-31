@@ -10,6 +10,7 @@ import TaskTable from "./components/tasktable";
 import AllWorkers from "./pages/main/farmer/allworkers";
 import AlertsPage from "./pages/main/farmer/alerts";
 import SensorsFallback from "./pages/fallback/comingsoon";
+import ProfilePage from "./pages/main/farmer/profile";
 
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
+          <Route path="/profile" element={<ProfilePage />} />
           <Route path="/soon" element={<SensorsFallback />} />
           <Route path="/alerts" element={<AlertsPage />} />
           <Route path="/workers" element={<AllWorkers />} />

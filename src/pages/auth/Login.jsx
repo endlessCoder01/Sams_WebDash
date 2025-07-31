@@ -44,6 +44,8 @@ const Login = () => {
         );
 
         localStorage.setItem("token", JSON.stringify(result.token.token));
+        localStorage.setItem("user_id", JSON.stringify(result.token.userDetails.userId));
+
         navigate("/home");
       } else {
         await Swal.fire(

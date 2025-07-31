@@ -34,33 +34,26 @@ const AlertsPage = () => {
     fetchAlerts();
   }, []);
 
-  const fetchAlerts = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch("http://localhost:3000/alert/with_info", {
-        headers,
-      });
-      const data = await res.json();
+const fetchAlerts = async () => {
+  setLoading(true);
+  try {
+    const res = await fetch("http://localhost:3000/alert/with_info", { headers });
+    const data = await res.json();
 
-      const statusedData = data.map((alert, index) => ({
-        ...alert,
-        status:
-          index === 0
-            ? "initiated"
-            : index === 1
-            ? "cancelled"
-            : index === 2
-            ? "missed"
-            : "seen",
-      }));
+    const possibleStatuses = ["initiated", "cancelled", "missed", "seen"];
+    const statusedData = data.map((alert) => ({
+      ...alert,
+      status: alert.status || possibleStatuses[Math.floor(Math.random() * 4)]
+    }));
 
-      setAlerts(statusedData);
-      setFilteredAlerts(statusedData);
-    } catch (err) {
-      Swal.fire("Error", "Failed to load alerts", "error");
-    }
-    setLoading(false);
-  };
+    setAlerts(statusedData);
+    setFilteredAlerts(statusedData);
+  } catch (err) {
+    Swal.fire("Error", "Failed to load alerts", "error");
+  }
+  setLoading(false);
+};
+
 
   const filterAlerts = (term, type, severity) => {
     let filtered = alerts.filter(

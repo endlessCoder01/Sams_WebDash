@@ -1,0 +1,27 @@
+.sensors-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background: linear-gradient(135deg, #6B6F1D, #FCE023);
+  text-align: center;
+  color: #fff;
+  padding: 20px;
+}
+
+.rocket {
+  width: 300px;
+  height: 300px;
+  margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+}
+
+p {
+  font-size: 1.2rem;
+  max-width: 500px;
+}

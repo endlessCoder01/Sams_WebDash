@@ -73,13 +73,14 @@ const ProfilePage = () => {
     });
   };
 
+
   if (!user) return <div className="profile-loading">Loading Profile...</div>;
 
   return (
     <div className="profile-container">
       <div className="profile-header">
         <img
-          src={user.profile_picture ? `http://localhost:3000/${user.profile_picture}` : "/default-avatar.png"}
+          src={`http://localhost:3000/${user.profile_picture.replace(/\\/g, "/")}`}
           alt="Profile"
           className="profile-pic"
         />

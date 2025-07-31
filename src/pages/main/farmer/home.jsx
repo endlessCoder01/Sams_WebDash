@@ -1,25 +1,41 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AgriNewsSlider from "../../../components/news2";
 import TodayActivityCard from "../../../components/activity/activitycard";
 import WeatherCard from "../../../components/weather";
+import { fetchHomeData } from "../../../services/homeService";
+import Swal from "sweetalert2";
 import "./HomePage.css";
-
-const alerts = [
-  "Irrigation needed in Plot A",
-  "New pest outbreak detected in maize field",
-  "Low soil moisture in Plot B",
-  "Upcoming inspection scheduled tomorrow at 10AM",
-  "Weather warning: Heavy rains expected tonight",
-];
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [alerts, setAlerts] = useState([]);
+  const [farms, setFarms] = useState([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("token"));
+        const user = JSON.parse(localStorage.getItem("user_id")); 
+        if (!user) {
+          Swal.fire("Error", "User not logged in", "error");
+          return;
+        }
+
+        const data = await fetchHomeData(user, token);
+        setAlerts(data.alerts);
+        setFarms(data.farms);
+      } catch (err) {
+        Swal.fire("Error", "Failed to load home data", "error");
+      }
+    };
+
+    loadData();
+  }, []);
 
   return (
     <div className="home-container">
-      {/* 🧱 Main Content Layout */}
       <div className="content-row">
-        {/* 🌤️ Weather */}
+        {/* 🌤 Weather */}
         <div className="left-column">
           <WeatherCard />
         </div>
@@ -42,11 +58,15 @@ const HomePage = () => {
             />
           </div>
           <h3>Alerts</h3>
-          {alerts.map((alert, index) => (
-            <div className="alert-item" key={index}>
-              {alert}
-            </div>
-          ))}
+          {alerts.length > 0 ? (
+            alerts.map((alert) => (
+              <div className="alert-item" key={alert.alert_id}>
+                <strong>{alert.farm_name}</strong> — {alert.message}
+              </div>
+            ))
+          ) : (
+            <p className="no-alerts">No alerts available</p>
+          )}
         </div>
 
         {/* 📰 News */}

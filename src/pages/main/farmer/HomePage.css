@@ -143,3 +143,23 @@ html,
     margin-top: 10px;
   }
 }
+.task-summary-card {
+  background: #fce023;
+  color: #000;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-bottom: 1rem;
+  font-family: Arial, sans-serif;
+}
+
+.task-summary-card h4 {
+  margin: 0;
+}
+
+.task-count {
+  font-size: 2rem;
+  font-weight: bold;
+  color: #6B6F1D;
+}
+

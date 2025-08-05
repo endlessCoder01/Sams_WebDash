@@ -10,12 +10,13 @@ const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [alerts, setAlerts] = useState([]);
   const [farms, setFarms] = useState([]);
+  const [myTasksCount, setMyTasksCount] = useState(0);
 
   useEffect(() => {
     const loadData = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("token"));
-        const user = JSON.parse(localStorage.getItem("user_id")); 
+        const user = JSON.parse(localStorage.getItem("user_id"));
         if (!user) {
           Swal.fire("Error", "User not logged in", "error");
           return;
@@ -24,6 +25,7 @@ const HomePage = () => {
         const data = await fetchHomeData(user, token);
         setAlerts(data.alerts);
         setFarms(data.farms);
+        setMyTasksCount(data.myTasks.length);
       } catch (err) {
         Swal.fire("Error", "Failed to load home data", "error");
       }
@@ -42,6 +44,10 @@ const HomePage = () => {
 
         {/* ✅ Tasks */}
         <div className="right-column">
+          <div className="task-summary-card">
+            <h4>📋 My Assigned Tasks</h4>
+            <p className="task-count">{myTasksCount}</p>
+          </div>
           <TodayActivityCard searchTerm={searchTerm} />
         </div>
 

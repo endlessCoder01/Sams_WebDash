@@ -44,10 +44,7 @@ const HomePage = () => {
 
         {/* ✅ Tasks */}
         <div className="right-column">
-          <div className="task-summary-card">
-            <h4>📋 My Assigned Tasks</h4>
-            <p className="task-count">{myTasksCount}</p>
-          </div>
+            <h5>📋 My Assigned Tasks ({myTasksCount})</h5>
           <TodayActivityCard searchTerm={searchTerm} />
         </div>
 

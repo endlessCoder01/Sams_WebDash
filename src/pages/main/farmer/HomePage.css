@@ -153,9 +153,9 @@ html,
   font-family: Arial, sans-serif;
 }
 
-.task-summary-card h4 {
-  margin: 0;
-}
+/* .task-summary-card h4 {
+  margin: -3;
+} */
 
 .task-count {
   font-size: 2rem;

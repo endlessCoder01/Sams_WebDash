@@ -7,7 +7,7 @@ import CustomDropdown from "../../components/input/customdropdown";
 import ImageUploadPreview from "../../components/input/ImageUploads";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../services/config";
-import Swal from 'sweetalert2';
+import Swal from "sweetalert2";
 
 const ProfileRole = () => {
   const [selectedRole, setSelectedRole] = useState("");
@@ -93,125 +93,160 @@ const ProfileRole = () => {
   //   }
   // };
 
-//   const handleImageUpload = async (imageUri) => {
-//   console.log("Image URI:", imageUri);
+  //   const handleImageUpload = async (imageUri) => {
+  //   console.log("Image URI:", imageUri);
 
-//   // 🛡️ Ensure it's a string
-//   const uri = typeof imageUri === "string" ? imageUri : imageUri?.uri;
+  //   // 🛡️ Ensure it's a string
+  //   const uri = typeof imageUri === "string" ? imageUri : imageUri?.uri;
 
-//   if (!uri) {
-//     throw new Error("Invalid image URI");
-//   }
+  //   if (!uri) {
+  //     throw new Error("Invalid image URI");
+  //   }
 
-//   const formData = new FormData();
-//   const fileName = uri.split("/").pop();
-//   const type = `image/${fileName.split(".").pop()}`;
+  //   const formData = new FormData();
+  //   const fileName = uri.split("/").pop();
+  //   const type = `image/${fileName.split(".").pop()}`;
 
-//   formData.append("image", {
-//     uri: uri,
-//     name: fileName,
-//     type: type,
-//   });
+  //   formData.append("image", {
+  //     uri: uri,
+  //     name: fileName,
+  //     type: type,
+  //   });
 
-//   try {
-//     const response = await fetch(`${API}/uploads`, {
-//       method: "POST",
-//       body: formData,
-//     });
+  //   try {
+  //     const response = await fetch(`${API}/uploads`, {
+  //       method: "POST",
+  //       body: formData,
+  //     });
 
-//     if (!response.ok) {
-//       const errorText = await response.text();
-//       throw new Error(`Upload failed: ${errorText}`);
-//     }
+  //     if (!response.ok) {
+  //       const errorText = await response.text();
+  //       throw new Error(`Upload failed: ${errorText}`);
+  //     }
 
-//     const data = await response.json();
-//     return data.path;
-//   } catch (error) {
-//     console.log("Upload error:", error);
-//     throw new Error("Failed to upload image");
-//   }
-// };
+  //     const data = await response.json();
+  //     return data.path;
+  //   } catch (error) {
+  //     console.log("Upload error:", error);
+  //     throw new Error("Failed to upload image");
+  //   }
+  // };
 
-const handleImageUpload = async (file) => {
-  console.log("Image URI (File):", file);
+  const handleImageUpload = async (file) => {
+    console.log("Image URI (File):", file);
 
-  if (!file || !(file instanceof File)) {
-    throw new Error("Invalid image file");
-  }
-
-  const formData = new FormData();
-  formData.append("image", file); 
-
-  try {
-    const response = await fetch(`${API}/uploads`, {
-      method: "POST",
-      body: formData,
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Upload failed: ${errorText}`);
+    if (!file || !(file instanceof File)) {
+      throw new Error("Invalid image file");
     }
 
-    const data = await response.json();
-    return data.path; // adjust this based on your backend response
-  } catch (error) {
-    console.error("Upload error:", error);
-    throw new Error("Failed to upload image");
-  }
-};
+    const formData = new FormData();
+    formData.append("image", file);
 
+    try {
+      const response = await fetch(`${API}/uploads`, {
+        method: "POST",
+        body: formData,
+      });
 
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Upload failed: ${errorText}`);
+      }
 
-const createUser = async () => {
-  let info = localStorage.getItem("info");
-  const userInfo = await JSON.parse(info);
-
-  const profile = await handleImageUpload(profileImage);
-  const newUser = {
-    name: userInfo.name,
-    email: userInfo.email,
-    password: userInfo.password,
-    phone_number: contact,
-    home_address: address,
-    role: selectedRole,
-    profile_picture: profile,
+      const data = await response.json();
+      return data.path; // adjust this based on your backend response
+    } catch (error) {
+      console.error("Upload error:", error);
+      throw new Error("Failed to upload image");
+    }
   };
 
-  console.log("Going from page 3", newUser);
+  const sendToDocuments = async (url, userId) => {
+    const newData = {
+      user_id: userId,
+      title: "profile picture",
+      description: "profile",
+      file_url: url,
+    };
 
-  try {
-    const response = await fetch(`${API}/auth/register`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(newUser),
-    });
+    try {
+      const response = await fetch(`${API}/auth/documents`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newData),
+      });
 
-    if (!response.ok) {
-      const errorText = await response.text();
-      throw new Error(`Failed to create user: ${errorText}`);
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to create user: ${errorText}`);
+        return false;
+      }
+
+      return true;
+    } catch (error) {
+      console.error(error);
     }
+  };
 
-    Swal.fire({
-      icon: 'success',
-      title: 'Success!',
-      text: 'User account created successfully.',
-      confirmButtonColor: '#3085d6',
-    });
+  const createUser = async () => {
+    let info = localStorage.getItem("info");
+    const userInfo = await JSON.parse(info);
 
-  } catch (error) {
-    console.error(error);
-    Swal.fire({
-      icon: 'error',
-      title: 'Oops...',
-      text: error.message || 'Something went wrong during registration.',
-      confirmButtonColor: '#d33',
-    });
-  }
-};
+    const profile = await handleImageUpload(profileImage);
+    const newUser = {
+      name: userInfo.name,
+      email: userInfo.email,
+      password: userInfo.password,
+      phone_number: contact,
+      home_address: address,
+      role: selectedRole,
+      profile_picture: profile,
+    };
 
+    try {
+      const response = await fetch(`${API}/auth/register`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(newUser),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Failed to create user: ${errorText}`);
+      }
+
+      const userRes = await response.json();
+      const toDoc = await sendToDocuments(profile, userRes.id);
+
+      if (toDoc) {
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: "User account created successfully.",
+          confirmButtonColor: "#3085d6",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Oops...",
+          text: "Something went wrong during registration.",
+          confirmButtonColor: "#d33",
+        });
+      }
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.message || "Something went wrong during registration.",
+        confirmButtonColor: "#d33",
+      });
+    }
+  };
 
   const changedAddress = (event) => {
     setAddress(event.target.value);

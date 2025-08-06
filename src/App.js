@@ -11,6 +11,7 @@ import AllWorkers from "./pages/main/farmer/allworkers";
 import AlertsPage from "./pages/main/farmer/alerts";
 import SensorsFallback from "./pages/fallback/comingsoon";
 import ProfilePage from "./pages/main/farmer/profile";
+import FarmRegistration from "./pages/auth/KYC/farmDocx";
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
+          <Route path="/signup_farm" element={<FarmRegistration />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/soon" element={<SensorsFallback />} />
           <Route path="/alerts" element={<AlertsPage />} />

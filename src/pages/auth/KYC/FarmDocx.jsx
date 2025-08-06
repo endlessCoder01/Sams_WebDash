@@ -5,54 +5,73 @@ import Heading from "../../../components/headings/Heading";
 import Button from "../../../components/buttons/Button";
 import CustomDropdown from "../../../components/input/customdropdown";
 import ImageUploadPreview from "../../../components/input/ImageUploads";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { API } from "../../../services/config";
 import Swal from "sweetalert2";
 
+
 const FarmRegistration = () => {
-  const [selectedRole, setSelectedRole] = useState("");
-  const [address, setAddress] = useState();
+  const { userId } = useParams(); 
+
+  console.log("id yauya", userId)
   const [name, setName] = useState();
   const [location, setLocation] = useState();
   const [type, setType] = useState();
   const [size, setSize] = useState();
-  const [profileImage, setProfileImage] = useState(null);
+  const [nId, setNId] = useState(null);
+  const [deeds, setDeeds] = useState(null);
+  const [regLicense, setRegLicense] = useState(null);
+  const [layout, setLayout] = useState(null);
+  const [insurance, setInsurance] = useState(null);
 
   const navigate = useNavigate();
   const SignUp = async () => {
-    await createUser();
+    await RegisterFarm();
   };
 
-  const handleImageUpload = async (file) => {
-    console.log("Image URI (File):", file);
+const handleImageUpload = async (file) => {
+  console.log("Image URI (File):", file);
 
-    if (!file || !(file instanceof File)) {
-      throw new Error("Invalid image file");
+  // ✅ Return "N/A" immediately if file is null or undefined
+  if (file === null || file === undefined) {
+    return "N/A";
+  }
+
+  // ✅ Only validate the file if it actually exists
+  if (!(file instanceof File)) {
+    throw new Error("Invalid image file");
+  }
+
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const response = await fetch(`${API}/uploads`, {
+      method: "POST",
+      body: formData,
+    });
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      throw new Error(`Upload failed: ${errorText}`);
     }
 
-    const formData = new FormData();
-    formData.append("image", file);
+    const data = await response.json();
+    return data.path; // adjust this based on your backend response
+  } catch (error) {
+    console.error("Upload error:", error);
+    throw new Error("Failed to upload image");
+  }
+};
 
-    try {
-      const response = await fetch(`${API}/uploads`, {
-        method: "POST",
-        body: formData,
-      });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        throw new Error(`Upload failed: ${errorText}`);
-      }
-
-      const data = await response.json();
-      return data.path; // adjust this based on your backend response
-    } catch (error) {
-      console.error("Upload error:", error);
-      throw new Error("Failed to upload image");
-    }
-  };
 
   const sendToDocuments = async (url, userId, title, description) => {
+
+    if (url === "" || url === null || url === undefined) return;
+    if (userId === "" || userId === null || userId === undefined) return;
+    if (title === "" || title === null || title === undefined) return;
+    if (description === "" || description === null || description === undefined)return;
+
     const newData = {
       user_id: userId,
       title: title,
@@ -81,50 +100,55 @@ const FarmRegistration = () => {
     }
   };
 
-  const createUser = async () => {
-    let info = localStorage.getItem("info");
-    const userInfo = await JSON.parse(info);
+  const RegisterFarm = async () => {
+    const nationalID = await handleImageUpload(nId);
+    const Tdeeds = await handleImageUpload(deeds);
+    const license = await handleImageUpload(regLicense);
+    const Flayout = await handleImageUpload(layout);
+    const Cinsurance = await handleImageUpload(insurance);
 
-    const profile = await handleImageUpload(profileImage);
-    const newUser = {
-      name: userInfo.name,
-      email: userInfo.email,
-      password: userInfo.password,
-      profile_picture: profile,
+    const newFarm = {
+      user_id: userId,
+      farm_name: name,
+      location: location,
+      size: size,
+      soil_type: type,
     };
 
+    console.log(newFarm)
+
     try {
-      const response = await fetch(`${API}/auth/register`, {
+      const response = await fetch(`${API}/auth/register/farm`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(newUser),
+        body: JSON.stringify(newFarm),
       });
 
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Failed to create user: ${errorText}`);
       }
+      await sendToDocuments(nationalID, userId, "ID", "Zimbabwe National ID");
+      await sendToDocuments(Tdeeds, userId, "Title Deeds", "Farm Title deeds");
+      await sendToDocuments(
+        license,
+        userId,
+        "License",
+        "Farm Registration License"
+      );
+      await sendToDocuments(Flayout, userId, "Layout", "Farm Layout");
+      await sendToDocuments(Cinsurance, userId, "Insurance", "Crop Insurance");
 
-      const userRes = await response.json();
-      const toDoc = await sendToDocuments(profile, userRes.id);
+      Swal.fire({
+        icon: "success",
+        title: "Success!",
+        text: "Farm registered successfully.",
+        confirmButtonColor: "#3085d6",
+      });
 
-      if (toDoc) {
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "User account created successfully.",
-          confirmButtonColor: "#3085d6",
-        });
-      } else {
-        Swal.fire({
-          icon: "error",
-          title: "Oops...",
-          text: "Something went wrong during registration.",
-          confirmButtonColor: "#d33",
-        });
-      }
+       navigate('/');
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -158,37 +182,41 @@ const FarmRegistration = () => {
         <Heading text="Register Farm" id="signup-heading" />
 
         <label className="dropdown-label">Title Deeds Image</label>
-        <ImageUploadPreview onImageSelect={setProfileImage} />
+        <ImageUploadPreview onImageSelect={setDeeds} />
 
         <label className="dropdown-label">National ID Image</label>
-        <ImageUploadPreview onImageSelect={setProfileImage} />
+        <ImageUploadPreview onImageSelect={setNId} />
 
-        <label className="dropdown-label">Farm Registration License Image</label>
-        <ImageUploadPreview onImageSelect={setProfileImage} />
+        <label className="dropdown-label">
+          Farm Registration License Image
+        </label>
+        <ImageUploadPreview onImageSelect={setRegLicense} />
 
         <label className="dropdown-label">Farm Layout Image</label>
-        <ImageUploadPreview onImageSelect={setProfileImage} />
+        <ImageUploadPreview onImageSelect={setLayout} />
 
         <label className="dropdown-label">Crop Insurance Image</label>
-        <ImageUploadPreview onImageSelect={setProfileImage} />
+        <ImageUploadPreview onImageSelect={setInsurance} />
 
         <Input type="text" hold="Farm Name" changed={changedFarmName} />
 
         <Input type="text" hold="Farm Address" changed={changedLocation} />
         <CustomDropdown
           label="Select Soil Type"
-          name="role"
-          value={selectedRole}
+          name="type"
+          value={type}
           onChange={(e) => setType(e.target.value)}
           options={[
-            { value: "farmer", label: "Farmer" },
-            { value: "agronomist", label: "Agronomist" },
-            //   { value: "admin", label: "Admin" },
+            { value: "sandy", label: "Sandy" },
+            { value: "silty", label: "Silty" },
+            { value: "clay", label: "Clay" },
+            { value: "loam", label: "Loam" },
+            { value: "peat", label: "Peat" },
           ]}
         />
         <Input type="text" hold="Size (in hectares)" changed={changedSize} />
 
-        <Button name="Sign Up" click={SignUp} />
+        <Button name="Register Farm" click={SignUp} />
       </div>
     </div>
   );

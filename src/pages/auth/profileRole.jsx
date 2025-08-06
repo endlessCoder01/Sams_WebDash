@@ -229,6 +229,9 @@ const ProfileRole = () => {
           text: "User account created successfully.",
           confirmButtonColor: "#3085d6",
         });
+
+       navigate(`/signup_farm/${userRes.id}`);
+
       } else {
         Swal.fire({
           icon: "error",

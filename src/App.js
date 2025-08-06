@@ -20,7 +20,7 @@ function App() {
       <Router>
         <Navbar/>
         <Routes>
-          <Route path="/signup_farm" element={<FarmRegistration />} />
+<Route path="/signup_farm/:userId" element={<FarmRegistration />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/soon" element={<SensorsFallback />} />
           <Route path="/alerts" element={<AlertsPage />} />

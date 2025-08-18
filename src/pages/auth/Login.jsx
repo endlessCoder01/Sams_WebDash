@@ -7,7 +7,7 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { API } from "../../services/config";
 
-const Login = () => {
+const Login = ({ onLogin }) => {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
@@ -44,8 +44,12 @@ const Login = () => {
         );
 
         localStorage.setItem("token", JSON.stringify(result.token.token));
-        localStorage.setItem("user_id", JSON.stringify(result.token.userDetails.userId));
+        localStorage.setItem(
+          "user_id",
+          JSON.stringify(result.token.userDetails.userId)
+        );
 
+        onLogin();
         navigate("/home");
       } else {
         await Swal.fire(

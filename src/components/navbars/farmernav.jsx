@@ -12,6 +12,7 @@ import {
   faPooStorm,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Navbar.css";
+import { Link } from "react-router-dom";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -31,13 +32,13 @@ const Navbar = () => {
           <FontAwesomeIcon icon={faTimes} />
         </button>
         <ul>
-          <li><a href="/home"><FontAwesomeIcon icon={faHome} /> Home</a></li>
-          <li><a href="/tasks"><FontAwesomeIcon icon={faTasks} /> Tasks</a></li>
-          <li><a href="/workers"><FontAwesomeIcon icon={faUserGroup} /> Employees</a></li>
-          <li><a href="/alerts"><FontAwesomeIcon icon={faBell} /> Alerts</a></li>
-          <li><a href="/soon"><FontAwesomeIcon icon={faPooStorm} /> Sensors</a></li>
-          <li><a href="/profile"><FontAwesomeIcon icon={faUser} /> Profile</a></li>
-          <li><a href="#"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</a></li>
+          <li><Link to ="/home" onClick={toggleMenu}><FontAwesomeIcon icon={faHome} /> Home</Link></li>
+          <li><Link to ="/tasks" onClick={toggleMenu}><FontAwesomeIcon icon={faTasks} /> Tasks</Link></li>
+          <li><Link to ="/workers"><FontAwesomeIcon icon={faUserGroup} /> Employees</Link></li>
+          <li><Link to="/alerts"><FontAwesomeIcon icon={faBell} /> Alerts</Link></li>
+          <li><Link to="/soon"><FontAwesomeIcon icon={faPooStorm} /> Sensors</Link></li>
+          <li><Link to="/profile"><FontAwesomeIcon icon={faUser} /> Profile</Link></li>
+          <li><Link to="#"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</Link></li>
         </ul>
       </div>
     </>

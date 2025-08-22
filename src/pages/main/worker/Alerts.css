@@ -1,0 +1,233 @@
+.alerts-container {
+  padding: 2rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #fefefe;
+  min-height: 100vh;
+  animation: fadeIn 0.6s ease-in-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+h2 {
+  color: #6B6F1D;
+  margin-bottom: 1.5rem;
+  font-size: 2rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  border-left: 5px solid #FCE023;
+  padding-left: 10px;
+}
+
+.filters {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.filters input,
+.filters select {
+  padding: 0.6rem 1rem;
+  border: 2px solid #6B6F1D;
+  border-radius: 6px;
+  outline: none;
+  transition: 0.3s ease;
+  background-color: #fffbe6;
+}
+
+.filters input:focus,
+.filters select:focus {
+  border-color: #FCE023;
+  background-color: #fffff3;
+}
+
+.alerts-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+  transition: box-shadow 0.3s ease-in-out;
+}
+
+.alerts-table th,
+.alerts-table td {
+  padding: 14px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+  transition: background 0.3s;
+}
+
+.alerts-table th {
+  background-color: #FCE023;
+  color: #000;
+  font-size: 0.95rem;
+  text-transform: uppercase;
+}
+
+.alerts-table tr:hover td {
+  background-color: #f9f9f9;
+}
+
+.seen-btn,
+.cancel-btn,
+.delete-btn {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.seen-btn {
+  background-color: #6B6F1D;
+  color: white;
+}
+.seen-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(107, 111, 29, 0.5);
+}
+
+.cancel-btn {
+  background-color: #ff9800;
+  color: white;
+}
+.cancel-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(255, 152, 0, 0.5);
+}
+
+.delete-btn {
+  background-color: #e53935;
+  color: white;
+}
+.delete-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 2px 6px rgba(229, 57, 53, 0.5);
+}
+
+.no-action {
+  color: #28a745;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.missed-row {
+  background-color: #ffe5e5;
+  font-style: italic;
+  border-left: 5px solid #e53935;
+}
+
+/* Status badge (optional) */
+.status-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+.status-initiated {
+  background: #fff3cd;
+  color: #856404;
+}
+
+.status-cancelled {
+  background: #f8d7da;
+  color: #721c24;
+}
+
+.status-seen {
+  background: #d4edda;
+  color: #155724;
+}
+
+.status-missed {
+  background: #ffe0e0;
+  color: #721c24;
+}
+
+.status-badge {
+  padding: 3px 8px;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+.status-initiated {
+  background: #ffe564;
+  color: #000;
+}
+
+.status-cancelled {
+  background: #ff8c42;
+  color: #fff;
+}
+
+.status-missed {
+  background: #ff4c4c;
+  color: #fff;
+}
+
+.status-seen {
+  background: #b4e197;
+  color: #000;
+}
+
+.loading-spinner {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #6B6F1D;
+  padding: 2rem;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0.5; }
+  50% { opacity: 1; }
+  100% { opacity: 0.5; }
+}
+
+.pagination {
+  margin-top: 1rem;
+  text-align: center;
+}
+
+.pagination button {
+  background: #6B6F1D;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  margin: 0 2px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.pagination button.active {
+  background: #FCE023;
+  color: #000;
+}
+.search-box {
+  position: relative;
+  display: inline-block;
+}
+
+.search-box input {
+  padding-left: 25px;
+}
+
+.search-icon {
+  position: absolute;
+  top: 50%;
+  left: 8px;
+  transform: translateY(-50%);
+  color: #888;
+}

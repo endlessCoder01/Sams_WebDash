@@ -18,6 +18,8 @@ const WorkerNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
+          const user = JSON.parse(localStorage.getItem("user_id"));
+
 
   return (
     <>
@@ -34,8 +36,7 @@ const WorkerNavbar = () => {
         <ul>
           <li><Link to ="/home/worker" onClick={toggleMenu}><FontAwesomeIcon icon={faHome} /> Home</Link></li>
           <li><Link to ="/worker/tasks" onClick={toggleMenu}><FontAwesomeIcon icon={faTasks} /> Tasks</Link></li>
-          <li><Link to="/alerts"><FontAwesomeIcon icon={faBell} /> Alerts</Link></li>
-          <li><Link to="/profile"><FontAwesomeIcon icon={faUser} /> Profile</Link></li>
+          <li><Link to={`/alerts/worker/${user}`} onClick={toggleMenu}><FontAwesomeIcon icon={faBell} /> Alerts</Link></li>          <li><Link to="/profile" onClick={toggleMenu}><FontAwesomeIcon icon={faUser} /> Profile</Link></li>
           <li><Link to="#"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</Link></li>
         </ul>
       </div>

@@ -20,6 +20,7 @@ import ProfilePage from "./pages/main/farmer/profile";
 import FarmRegistration from "./pages/auth/KYC/farmDocx";
 import HomePageWorker from "./pages/main/worker/home";
 import WorkerNavbar from "./components/navbars/workerNav";
+import AlertsWorkerPage from "./pages/main/worker/alerts";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -53,6 +54,7 @@ function App() {
             ) : role === "worker" ? (
               <>
                 <Route path="/home/worker" element={<HomePageWorker />} />
+                <Route path="/alerts/worker/:userId" element={<AlertsWorkerPage />} />
                 <Route path="*" element={<Navigate to="/home/worker" replace />} />
               </>
             ) : (

@@ -13,8 +13,10 @@ import {
   faBell,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import { useParams } from "react-router-dom";
 
-const AlertsPage = () => {
+
+const AlertsWorkerPage = () => {
   const [alerts, setAlerts] = useState([]);
   const [filteredAlerts, setFilteredAlerts] = useState([]);
   const [search, setSearch] = useState("");
@@ -23,10 +25,12 @@ const AlertsPage = () => {
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const alertsPerPage = 5;
+  const { userId } = useParams(); 
+  
 
   const token = localStorage.getItem("token");
   const headers = {
-    Authorization: `Bearer ${JSON.parse(token)}`,
+    Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
   };
 
@@ -37,7 +41,7 @@ const AlertsPage = () => {
 const fetchAlerts = async () => {
   setLoading(true);
   try {
-    const res = await fetch("http://localhost:3000/alert/with_info", { headers });
+    const res = await fetch(`http://localhost:3000/alert/with_info/${userId}`, { headers });
     const data = await res.json();
 
     const possibleStatuses = ["initiated", "cancelled", "missed", "seen"];
@@ -305,4 +309,4 @@ const handleDelete = async (alertId) => {
   );
 };
 
-export default AlertsPage;
+export default AlertsWorkerPage;

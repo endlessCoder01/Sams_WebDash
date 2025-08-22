@@ -85,12 +85,38 @@ const TaskTable = () => {
     return user ? user.name : "Unknown";
   };
 
-  const assignUser = (taskId, userId) => {
-    const updated = tasks.map((task) =>
-      task.task_id === taskId ? { ...task, assigned_to: userId } : task
-    );
-    setTasks(updated);
-    setShowAssignPopup(null);
+  const assignUser = async (taskId, userId) => {
+    const data = {
+      userState: "occupied",
+      status: "pending",
+      assigned_to: userId,
+    };
+    const token = JSON.parse(localStorage.getItem("token"));
+
+    try {
+      const res = await fetch(
+        `http://localhost:3000/task/assignTask/${taskId}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (!res.ok) throw new Error(await res.text());
+      Swal.fire("Assigned!", "Task assigned successfully.", "success");
+
+      const updated = tasks.map((task) =>
+        task.task_id === taskId ? { ...task, assigned_to: userId } : task
+      );
+      setTasks(updated);
+      setShowAssignPopup(null);
+    } catch (error) {
+      console.log("Error from assignment", error);
+    }
   };
 
   const filteredTasks = tasks.filter(

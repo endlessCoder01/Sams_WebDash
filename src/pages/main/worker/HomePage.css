@@ -47,7 +47,7 @@ html,
 .content-row {
   display: grid;
   grid-template-columns: 1fr 1fr 300px; /* Alerts fixed width */
-  grid-template-rows: auto auto; /* Top (weather/tasks), Bottom (news) */
+  grid-template-rows: auto; /* Top (weather/tasks), Bottom (news) */
   grid-gap: 20px;
   margin-top: 10px;
 }
@@ -75,7 +75,8 @@ html,
 /* Tasks card */
 .right-column {
   background-color: rgba(252, 224, 35, 0.85);
-  grid-column: 2 / 3;
+  grid-column: 1 / 3;
+  overflow-x: auto;
 }
 
 /* Alerts */

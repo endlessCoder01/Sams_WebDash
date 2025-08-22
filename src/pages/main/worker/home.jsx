@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
 import AgriNewsSlider from "../../../components/news2";
-import TodayActivityCard from "../../../components/activity/activitycard";
+// import TodayActivityCard from "../../../components/activity/activitycard";
 import WeatherCard from "../../../components/weather";
 import { fetchHomeData } from "../../../services/homeService";
 import Swal from "sweetalert2";
 import "./HomePage.css";
 
-const HomePage = () => {
+const HomePageWorker = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [alerts, setAlerts] = useState([]);
   const [farms, setFarms] = useState([]);
@@ -38,14 +38,14 @@ const HomePage = () => {
     <div className="home-container">
       <div className="content-row">
         {/* 🌤 Weather */}
-        <div className="left-column">
+        {/* <div className="left-column">
           <WeatherCard />
-        </div>
+        </div> */}
 
         {/* ✅ Tasks */}
         <div className="right-column">
             <h5>📋 My Assigned Tasks ({myTasksCount})</h5>
-          <TodayActivityCard searchTerm={searchTerm} />
+          {/* <TodayActivityCard searchTerm={searchTerm} /> */}
         </div>
 
         {/* 🚨 Alerts */}
@@ -81,4 +81,4 @@ const HomePage = () => {
   );
 };
 
-export default HomePage;
+export default HomePageWorker;

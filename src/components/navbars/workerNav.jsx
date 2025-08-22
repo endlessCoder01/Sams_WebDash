@@ -14,7 +14,7 @@ import {
 import "./Navbar.css";
 import { Link } from "react-router-dom";
 
-const Navbar = () => {
+const WorkerNavbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleMenu = () => setIsOpen(!isOpen);
@@ -32,11 +32,9 @@ const Navbar = () => {
           <FontAwesomeIcon icon={faTimes} />
         </button>
         <ul>
-          <li><Link to ="/home" onClick={toggleMenu}><FontAwesomeIcon icon={faHome} /> Home</Link></li>
-          <li><Link to ="/tasks" onClick={toggleMenu}><FontAwesomeIcon icon={faTasks} /> Tasks</Link></li>
-          <li><Link to ="/workers"><FontAwesomeIcon icon={faUserGroup} /> Employees</Link></li>
+          <li><Link to ="/home/worker" onClick={toggleMenu}><FontAwesomeIcon icon={faHome} /> Home</Link></li>
+          <li><Link to ="/worker/tasks" onClick={toggleMenu}><FontAwesomeIcon icon={faTasks} /> Tasks</Link></li>
           <li><Link to="/alerts"><FontAwesomeIcon icon={faBell} /> Alerts</Link></li>
-          <li><Link to="/soon"><FontAwesomeIcon icon={faPooStorm} /> Sensors</Link></li>
           <li><Link to="/profile"><FontAwesomeIcon icon={faUser} /> Profile</Link></li>
           <li><Link to="#"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</Link></li>
         </ul>
@@ -45,4 +43,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default WorkerNavbar;

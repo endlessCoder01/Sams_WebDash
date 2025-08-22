@@ -25,40 +25,41 @@ const Login = ({ onLogin }) => {
     try {
       const response = await fetch(`${API}/auth/login`, {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email: email,
-          password: password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
       });
 
       const result = await response.json();
+      console.log("login response:", result);
+
       if (response.ok && result) {
-        localStorage.setItem("tokens", JSON.stringify(result));
+        // Save token and user details
+        localStorage.setItem("token", result.token.token);
+        localStorage.setItem("user_id", result.token.userDetails.userId);
+        localStorage.setItem("role", result.token.userDetails.role);
+
         await Swal.fire(
           "Success!",
           "You have logged in successfully!",
           "success"
         );
 
-        localStorage.setItem("token", JSON.stringify(result.token.token));
-        localStorage.setItem(
-          "user_id",
-          JSON.stringify(result.token.userDetails.userId)
-        );
+        const role = result.token.userDetails.role;
 
-        onLogin();
-        navigate("/home");
+        // Tell App that we logged in with this role
+        onLogin(role);
+
+        // Navigate by role
+        if (role === "farmer" || role === "admin" || role === "agronomist") {
+          navigate("/home");
+        } else if (role === "worker") {
+          navigate("/home/worker");
+        }
       } else {
-        await Swal.fire(
-          "Error!",
-          result.message || "Login failed. Please try again.",
-          "error"
-        );
+        await Swal.fire("Error!", result.message || "Login failed", "error");
       }
     } catch (error) {
+      console.error("Login error:", error);
       console.log("Error", error);
       await Swal.fire(
         "Error!",

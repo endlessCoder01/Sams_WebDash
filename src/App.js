@@ -18,36 +18,49 @@ import AlertsPage from "./pages/main/farmer/alerts";
 import SensorsFallback from "./pages/fallback/comingsoon";
 import ProfilePage from "./pages/main/farmer/profile";
 import FarmRegistration from "./pages/auth/KYC/farmDocx";
+import HomePageWorker from "./pages/main/worker/home";
+import WorkerNavbar from "./components/navbars/workerNav";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [role, setRole] = useState(null);
 
-  const handleLogin = () => {
+  const handleLogin = (userRole) => {
     setIsAuthenticated(true);
+    setRole(userRole);
   };
 
   return (
     <div className="App">
       <Router>
-        {isAuthenticated && <Navbar />}
+        {/* Show navbar depending on role */}
+        {isAuthenticated && (role === "admin" || role === "farmer" || role === "agronomist") && <Navbar />}
+        {isAuthenticated && role === "worker" && <WorkerNavbar />}
+
         <Routes>
           {isAuthenticated ? (
-            <>
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/soon" element={<SensorsFallback />} />
-              <Route path="/alerts" element={<AlertsPage />} />
-              <Route path="/workers" element={<AllWorkers />} />
-              <Route path="/tasks" element={<TaskTable />} />
-              <Route path="/home" element={<HomePage />} />
-              <Route path="/activity" element={<TodayActivityCard />} />
-              <Route path="*" element={<Navigate to="/home" replace />} />
-            </>
+            role === "admin" || role === "farmer" || role === "agronomist" ? (
+              <>
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/soon" element={<SensorsFallback />} />
+                <Route path="/alerts" element={<AlertsPage />} />
+                <Route path="/workers" element={<AllWorkers />} />
+                <Route path="/tasks" element={<TaskTable />} />
+                <Route path="/home" element={<HomePage />} />
+                <Route path="/activity" element={<TodayActivityCard />} />
+                <Route path="*" element={<Navigate to="/home" replace />} />
+              </>
+            ) : role === "worker" ? (
+              <>
+                <Route path="/home/worker" element={<HomePageWorker />} />
+                <Route path="*" element={<Navigate to="/home/worker" replace />} />
+              </>
+            ) : (
+              <Route path="*" element={<Navigate to="/" replace />} />
+            )
           ) : (
             <>
-              <Route
-                path="/signup_farm/:userId"
-                element={<FarmRegistration />}
-              />
+              <Route path="/signup_farm/:userId" element={<FarmRegistration />} />
               <Route path="/signup_profile_role" element={<ProfileRole />} />
               <Route path="/signup" element={<SignUp />} />
               <Route path="/" element={<Login onLogin={handleLogin} />} />
@@ -59,5 +72,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

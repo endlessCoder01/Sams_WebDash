@@ -1,7 +1,13 @@
 import React, { useState, useEffect } from "react";
 import "../styles/TaskTable.css";
 import { FaUserCircle, FaSort, FaFilter } from "react-icons/fa";
-import { MdPending, MdDone, MdCancel } from "react-icons/md";
+import {
+  MdPending,
+  MdDone,
+  MdCancel,
+  MdStart,
+  MdNewReleases,
+} from "react-icons/md";
 import Swal from "sweetalert2";
 import EditTaskModal from "./modals/editTask";
 import CreateTaskModal from "./modals/createTask";
@@ -16,36 +22,36 @@ const TaskTable = () => {
   const [showCreateModal, setShowCreateModal] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = JSON.parse(localStorage.getItem("token"));
-        if (!token) return console.error("No token found in localStorage");
-
-        const headers = {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        };
-
-        const taskRes = await fetch("http://localhost:3000/task", { headers });
-        const userRes = await fetch("http://localhost:3000/users", { headers });
-
-        if (!taskRes.ok || !userRes.ok) {
-          console.error("Failed to fetch Task or User");
-          return;
-        }
-
-        const taskData = await taskRes.json();
-        const userData = await userRes.json();
-
-        setTasks(Array.isArray(taskData) ? taskData : [taskData]);
-        setUsers(Array.isArray(userData) ? userData : [userData]);
-      } catch (error) {
-        console.error("Failed to fetch data:", error);
-      }
-    };
-
     fetchData();
   }, []);
+
+  const fetchData = async () => {
+    try {
+      const token = JSON.parse(localStorage.getItem("token"));
+      if (!token) return console.error("No token found in localStorage");
+
+      const headers = {
+        Authorization: `Bearer ${token}`,
+        "Content-Type": "application/json",
+      };
+
+      const taskRes = await fetch("http://localhost:3000/task", { headers });
+      const userRes = await fetch("http://localhost:3000/users", { headers });
+
+      if (!taskRes.ok || !userRes.ok) {
+        console.error("Failed to fetch Task or User");
+        return;
+      }
+
+      const taskData = await taskRes.json();
+      const userData = await userRes.json();
+
+      setTasks(Array.isArray(taskData) ? taskData : [taskData]);
+      setUsers(Array.isArray(userData) ? userData : [userData]);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    }
+  };
 
   const deleteTask = async (taskId) => {
     const result = await Swal.fire({
@@ -53,7 +59,7 @@ const TaskTable = () => {
       text: "You won't be able to revert this!",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Yes, delete it!",
+      confirmButtonText: "Yes, cancel it!",
     });
 
     if (!result.isConfirmed) return;
@@ -61,22 +67,27 @@ const TaskTable = () => {
     try {
       const token = JSON.parse(localStorage.getItem("token"));
 
-      const res = await fetch(`http://localhost:3000/task/${taskId}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-      });
+      const res = await fetch(
+        `http://localhost:3000/task/updateTask/${taskId}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ status: "cancelled" }),
+        }
+      );
 
       if (!res.ok) throw new Error(await res.text());
 
-      setTasks((prev) => prev.filter((t) => t.task_id !== taskId));
+      // setTasks((prev) => prev.filter((t) => t.task_id !== taskId));
 
-      Swal.fire("Deleted!", "Your task has been deleted.", "success");
+      Swal.fire("Cancelled!", "The task has been cancelled.", "success");
+      await fetchData();
     } catch (err) {
       console.error("Delete Error:", err.message);
-      Swal.fire("Error", "Failed to delete task", "error");
+      Swal.fire("Error", "Failed to cancel task", "error");
     }
   };
 
@@ -142,9 +153,10 @@ const TaskTable = () => {
             value={filterStatus}
           >
             <option value="All">All</option>
-            <option value="pending">Pending</option>
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
+            <option value="initiated">Initiated</option>
+            <option value="pending">Pending</option>
           </select>
         </div>
 
@@ -190,6 +202,7 @@ const TaskTable = () => {
             return (
               <tr key={task.task_id}>
                 <td>
+                  <FaUserCircle />
                   {getUserName(task.assigned_to) || <em>Unassigned</em>}
                   {isUnassigned && !isCancelled && (
                     <>
@@ -222,15 +235,16 @@ const TaskTable = () => {
                   <span className={`badge ${task.status.toLowerCase()}`}>
                     {task.status.toLowerCase() === "pending" && <MdPending />}
                     {task.status.toLowerCase() === "completed" && <MdDone />}
-                    {task.status.toLowerCase() === "cancelled" && (
-                      <MdCancel />
-                    )}{" "}
+                    {task.status.toLowerCase() === "initiated" && (
+                      <MdNewReleases />
+                    )}
+                    {task.status.toLowerCase() === "cancelled" && <MdCancel />}{" "}
                     {task.status.charAt(0).toUpperCase() + task.status.slice(1)}
                   </span>
                 </td>
                 <td>{new Date(task.created_at).toLocaleDateString()}</td>
                 <td>
-                  {!isCancelled && (
+                  {!isCancelled && isUnassigned && (
                     <button
                       className="edit-btn"
                       onClick={() => setEditingTask(task)}
@@ -238,12 +252,18 @@ const TaskTable = () => {
                       Edit
                     </button>
                   )}
-                  <button
-                    className="delete-btn"
-                    onClick={() => deleteTask(task.task_id)}
-                  >
-                    Delete
-                  </button>
+
+                  {/* Show cancel button only if task is NOT cancelled or completed */}
+                  {!["cancelled", "completed"].includes(
+                    task.status.toLowerCase()
+                  ) && (
+                    <button
+                      className="delete-btn"
+                      onClick={() => deleteTask(task.task_id)}
+                    >
+                      Cancel
+                    </button>
+                  )}
                 </td>
               </tr>
             );

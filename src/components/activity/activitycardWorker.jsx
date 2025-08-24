@@ -2,65 +2,75 @@ import React, { useEffect, useState } from "react";
 import dayjs from "dayjs";
 import { MdPending, MdDone, MdCancel } from "react-icons/md";
 import "./TodayActivityCard.css";
-import TaskDetailModal from "../modals/taskdetail";
 import Swal from "sweetalert2";
+import TaskDetailModalWorker from "../modals/taskdetailWorker";
 
-const TodayActivityCard = () => {
+const TodayActivityCardWorker = () => {
   const [tasks, setTasks] = useState([]);
   const [users, setUsers] = useState([]);
   const [farms, setFarms] = useState([]);
   const [selectedTask, setSelectedTask] = useState(null);
 
   const dToken = localStorage.getItem("token");
+  const user = JSON.parse(localStorage.getItem("user_id"));
 
   const headers = {
     Authorization: `Bearer ${dToken}`,
   };
 
-  useEffect(() => {
-    const fetchAllData = async () => {
-      try {
-        const [tasksRes, usersRes, farmsRes] = await Promise.all([
-          fetch("http://localhost:3000/task", { headers }),
-          fetch("http://localhost:3000/users", { headers }),
-          fetch("http://localhost:3000/farms", { headers }),
-        ]);
+useEffect(() => {
+  const fetchAllData = async () => {
+    try {
+      const [tasksRes, userRes, farmsRes] = await Promise.all([
+        fetch("http://localhost:3000/task", { headers }),
+        fetch(`http://localhost:3000/users/${user}`, { headers }),
+        fetch("http://localhost:3000/farms", { headers }),
+      ]);
 
-        const [taskData, userData, farmData] = await Promise.all([
-          tasksRes.json(),
-          usersRes.json(),
-          farmsRes.json(),
-        ]);
+      const [taskData, userData, farmData] = await Promise.all([
+        tasksRes.json(),
+        userRes.json(),
+        farmsRes.json(),
+      ]);
 
-        console.log("userdata", taskData)
-        console.log("userdata", userData)
-        console.log("userdata", farmData)
-        const userMap = {};
-        userData.forEach((u) => {
-          userMap[u.user_id] = u.name || "Unnamed User";
-        });
+      console.log("taskdata", taskData);
+      console.log("userdata", userData);
+      console.log("farmdata", farmData);
 
-        const farmMap = {};
-        farmData.forEach((f) => {
-          farmMap[f.farm_id] = f.farm_name || "Unnamed Farm";
-        });
+      const farmMap = {};
+      farmData.forEach((f) => {
+        farmMap[f.farm_id] = f.farm_name || "Unnamed Farm";
+      });
 
-        const enrichedTasks = taskData.map((task) => ({
+      // ✅ filter tasks for current user
+      const userTasks = taskData
+        .filter((task) => task.assigned_to === userData.user_id)
+        .map((task) => ({
           ...task,
-          user_name: userMap[task.assigned_to] || "Unassigned",
+          user_name: userData.name,
           farm_name: farmMap[task.farm_id] || "Unknown",
         }));
 
-        setTasks(enrichedTasks);
-        setUsers(userData);
-        setFarms(farmData);
-      } catch (error) {
-        console.error("Failed to fetch data", error);
-      }
-    };
+      // ✅ custom sort order: pending → completed → cancelled
+      const statusOrder = { pending: 1, completed: 2, cancelled: 3 };
 
-    fetchAllData();
-  }, []);
+      const sortedTasks = userTasks.sort((a, b) => {
+        return (statusOrder[a.status] || 99) - (statusOrder[b.status] || 99);
+      });
+
+      setTasks(sortedTasks);
+      setUsers([userData]);
+      setFarms(farmData);
+    } catch (error) {
+      console.error("Failed to fetch data", error);
+    }
+  };
+
+  fetchAllData();
+}, []);
+
+
+
 
   const getStatusIcon = (status) => {
     const s = status.toLowerCase();
@@ -70,15 +80,15 @@ const TodayActivityCard = () => {
     return null;
   };
 
-  const handleAssign = async (taskId, userId) => {
+  const handleAssign = async (taskId) => {
     try {
-      const res = await fetch(`http://localhost:3000/task/${taskId}/assign`, {
-        method: "PUT",
+      const res = await fetch(`http://localhost:3000/task/updateTask/${taskId}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${JSON.parse(dToken)}`,
+          Authorization: `Bearer ${dToken}`,
         },
-        body: JSON.stringify({ assigned_to: userId }),
+        body: JSON.stringify({ status: "completed" }),
       });
 
       if (!res.ok) throw new Error("Failed to assign");
@@ -90,13 +100,13 @@ const TodayActivityCard = () => {
         task.task_id === taskId
           ? {
               ...task,
-              assigned_to: userId,
-              user_name: users.find((u) => u.user_id === Number(userId))?.name,
+              status: "completed",
             }
           : task
       );
       setTasks(updatedTasks);
     } catch (error) {
+      console.log("complete erroe", error)
       Swal.fire("Error", "Failed to assign task.", "error");
     }
   };
@@ -135,7 +145,7 @@ const TodayActivityCard = () => {
         )}
       </div>
       {selectedTask && (
-        <TaskDetailModal
+        <TaskDetailModalWorker
           task={selectedTask}
           onClose={() => setSelectedTask(null)}
           onAssign={handleAssign}
@@ -145,4 +155,4 @@ const TodayActivityCard = () => {
   );
 };
 
-export default TodayActivityCard;
+export default TodayActivityCardWorker;

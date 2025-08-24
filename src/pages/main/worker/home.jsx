@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from "react";
 import AgriNewsSlider from "../../../components/news2";
-// import TodayActivityCard from "../../../components/activity/activitycard";
+import TodayActivityCard from "../../../components/activity/activitycard";
 import WeatherCard from "../../../components/weather";
 import { fetchHomeData } from "../../../services/homeService";
 import Swal from "sweetalert2";
 import "./HomePage.css";
+import TodayActivityCardWorker from "../../../components/activity/activitycardWorker";
 
 const HomePageWorker = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -23,6 +24,7 @@ const HomePageWorker = () => {
         }
 
         const data = await fetchHomeData(user, token);
+        console.log("data from service", data);
         setAlerts(data.alerts);
         setFarms(data.farms);
         setMyTasksCount(data.myTasks.length);
@@ -45,7 +47,7 @@ const HomePageWorker = () => {
         {/* ✅ Tasks */}
         <div className="right-column">
             <h5>📋 My Assigned Tasks ({myTasksCount})</h5>
-          {/* <TodayActivityCard searchTerm={searchTerm} /> */}
+          <TodayActivityCardWorker searchTerm={searchTerm} />
         </div>
 
         {/* 🚨 Alerts */}

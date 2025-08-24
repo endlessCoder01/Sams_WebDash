@@ -13,6 +13,7 @@ import {
   faBell,
   faSearch,
 } from "@fortawesome/free-solid-svg-icons";
+import CreateAlertModal from "../../../components/modals/createAlert";
 
 const AlertsPage = () => {
   const [alerts, setAlerts] = useState([]);
@@ -22,6 +23,7 @@ const AlertsPage = () => {
   const [filterSeverity, setFilterSeverity] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showCreateModal, setShowCreateModal] = useState(false);
   const alertsPerPage = 5;
 
   const token = localStorage.getItem("token");
@@ -34,26 +36,27 @@ const AlertsPage = () => {
     fetchAlerts();
   }, []);
 
-const fetchAlerts = async () => {
-  setLoading(true);
-  try {
-    const res = await fetch("http://localhost:3000/alert/with_info", { headers });
-    const data = await res.json();
+  const fetchAlerts = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch("http://localhost:3000/alert/with_info", {
+        headers,
+      });
+      const data = await res.json();
 
-    const possibleStatuses = ["initiated", "cancelled", "missed", "seen"];
-    const statusedData = data.map((alert) => ({
-      ...alert,
-      status: alert.status || possibleStatuses[Math.floor(Math.random() * 4)]
-    }));
+      const possibleStatuses = ["initiated", "cancelled", "missed", "seen"];
+      const statusedData = data.map((alert) => ({
+        ...alert,
+        status: alert.status || possibleStatuses[Math.floor(Math.random() * 4)],
+      }));
 
-    setAlerts(statusedData);
-    setFilteredAlerts(statusedData);
-  } catch (err) {
-    Swal.fire("Error", "Failed to load alerts", "error");
-  }
-  setLoading(false);
-};
-
+      setAlerts(statusedData);
+      setFilteredAlerts(statusedData);
+    } catch (err) {
+      Swal.fire("Error", "Failed to load alerts", "error");
+    }
+    setLoading(false);
+  };
 
   const filterAlerts = (term, type, severity) => {
     let filtered = alerts.filter(
@@ -95,45 +98,44 @@ const fetchAlerts = async () => {
     }
   };
 
-const handleDelete = async (alertId) => {
-  const result = await Swal.fire({
-    title: "Are you sure?",
-    text: "This will permanently delete the alert.",
-    icon: "warning",
-    showCancelButton: true,
-    confirmButtonColor: "#d33",
-    cancelButtonColor: "#6B6F1D",
-    confirmButtonText: "Yes, delete it!",
-  });
+  const handleDelete = async (alertId) => {
+    const result = await Swal.fire({
+      title: "Are you sure?",
+      text: "This will permanently delete the alert.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#d33",
+      cancelButtonColor: "#6B6F1D",
+      confirmButtonText: "Yes, delete it!",
+    });
 
-  if (result.isConfirmed) {
-    try {
-      const response = await fetch(`http://localhost:3000/alert/${alertId}`, {
-        headers,
-        method: "DELETE",
-      });
+    if (result.isConfirmed) {
+      try {
+        const response = await fetch(`http://localhost:3000/alert/${alertId}`, {
+          headers,
+          method: "DELETE",
+        });
 
-      if (!response.ok) {
-        throw new Error("Failed to delete alert");
+        if (!response.ok) {
+          throw new Error("Failed to delete alert");
+        }
+
+        // Update UI
+        setAlerts((prev) => prev.filter((alert) => alert.alert_id !== alertId));
+
+        Swal.fire({
+          icon: "success",
+          title: "Deleted!",
+          text: "The alert has been deleted.",
+          timer: 2000,
+          showConfirmButton: false,
+        });
+      } catch (error) {
+        Swal.fire("Error", "Failed to delete alert.", "error");
+        console.error("Delete Alert Error:", error);
       }
-
-      // Update UI
-      setAlerts((prev) => prev.filter((alert) => alert.alert_id !== alertId));
-
-      Swal.fire({
-        icon: "success",
-        title: "Deleted!",
-        text: "The alert has been deleted.",
-        timer: 2000,
-        showConfirmButton: false,
-      });
-    } catch (error) {
-      Swal.fire("Error", "Failed to delete alert.", "error");
-      console.error("Delete Alert Error:", error);
     }
-  }
-};
-
+  };
 
   const handleSeen = (alert_id) => {
     setAlerts((prev) =>
@@ -151,20 +153,26 @@ const handleDelete = async (alertId) => {
 
   return (
     <div className="alerts-container">
-<h2>
-  <FontAwesomeIcon icon={faBell} /> Farm Alerts
-</h2>
+      <h2>
+        <FontAwesomeIcon icon={faBell} /> Farm Alerts
+      </h2>
+      <div className="filters">
+        <div className="search-box">
+          <FontAwesomeIcon icon={faSearch} className="search-icon" />
+          <input
+            type="text"
+            placeholder="Search alerts..."
+            value={search}
+            onChange={handleSearch}
+          />
+        </div>
 
-    <div className="filters">
-  <div className="search-box">
-    <FontAwesomeIcon icon={faSearch} className="search-icon" />
-    <input
-      type="text"
-      placeholder="Search alerts..."
-      value={search}
-      onChange={handleSearch}
-    />
-  </div>
+      {showCreateModal && (
+        <CreateAlertModal
+          onClose={() => setShowCreateModal(false)}
+          onTaskCreated={(newTask) => setTasks((prev) => [...prev, newTask])}
+        />
+      )}
 
         <select
           value={filterType}
@@ -191,7 +199,6 @@ const handleDelete = async (alertId) => {
           <option value="critical">Critical</option>
         </select>
       </div>
-
       {loading ? (
         <div className="loading-spinner">Loading Alerts...</div>
       ) : (
@@ -278,29 +285,41 @@ const handleDelete = async (alertId) => {
 
           {/* Pagination */}
           {totalPages > 1 && (
-          <div className="pagination">
-  <button disabled={currentPage === 1} onClick={() => setCurrentPage(p => p - 1)}>
-    <FontAwesomeIcon icon={faArrowLeft} />
-  </button>
+            <div className="pagination">
+              <button
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((p) => p - 1)}
+              >
+                <FontAwesomeIcon icon={faArrowLeft} />
+              </button>
 
-  {Array.from({ length: totalPages }, (_, i) => (
-    <button
-      key={i}
-      className={currentPage === i + 1 ? "active" : ""}
-      onClick={() => setCurrentPage(i + 1)}
-    >
-      {i + 1}
-    </button>
-  ))}
+              {Array.from({ length: totalPages }, (_, i) => (
+                <button
+                  key={i}
+                  className={currentPage === i + 1 ? "active" : ""}
+                  onClick={() => setCurrentPage(i + 1)}
+                >
+                  {i + 1}
+                </button>
+              ))}
 
-  <button disabled={currentPage === totalPages} onClick={() => setCurrentPage(p => p + 1)}>
-    <FontAwesomeIcon icon={faArrowRight} />
-  </button>
-</div>
-
+              <button
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((p) => p + 1)}
+              >
+                <FontAwesomeIcon icon={faArrowRight} />
+              </button>
+            </div>
           )}
         </>
       )}
+      <button
+        className="floating-add-button"
+        onClick={() => setShowCreateModal(true)}
+        title="Add Task"
+      >
+        +
+      </button>{" "}
     </div>
   );
 };

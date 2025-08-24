@@ -8,36 +8,40 @@ const CreateAlertModal = ({ onClose, onAlertCreated }) => {
     farm_id: "",
     message: "",
     type: "",
-    severity: "",
+    severity: "warning",
     initiated_by: "",
     alert_status: "seen",
   });
 
-  // Fetch users and farms
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem("token");
-        const user = JSON.parse(localStorage.getItem("user_id"));
-        const [farmsRes] = await Promise.all([
-          fetch(`http://localhost:3000/farms/user/${user}`, {
-            headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json",
-            },
-          }),
-        ]);
+useEffect(() => {
+  const fetchData = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const user = JSON.parse(localStorage.getItem("user_id"));
 
-        const farmsData = await farmsRes.json();
+      const farmsRes = await fetch(`http://localhost:3000/farms/joined/user/${user}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
 
-        setFarm(Array.isArray(farmsData) ? farmsData : [farmsData]);
-      } catch (err) {
-        console.error("Failed to fetch users or farms", err);
+      if (!farmsRes.ok) {
+        throw new Error("Failed to fetch farms");
       }
-    };
 
-    fetchData();
-  }, []);
+      const farmsData = await farmsRes.json();
+
+      console.log("farmdata", farmsData); // ✅ log parsed JSON
+      setFarm(farmsData[0]);
+    } catch (err) {
+      console.error("Failed to fetch users or farms", err);
+    }
+  };
+
+  fetchData();
+}, []);
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -56,6 +60,8 @@ const CreateAlertModal = ({ onClose, onAlertCreated }) => {
         initiated_by: user === "" ? null : parseInt(user),
         farm_id: farm.farm_id === "" ? null : parseInt(farm.farm_id),
       };
+
+      console.log("payload", payload);
 
       const res = await fetch("http://localhost:3000/alert", {
         method: "POST",

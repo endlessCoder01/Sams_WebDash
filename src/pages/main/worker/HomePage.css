@@ -116,6 +116,41 @@ html,
   border-radius: 3px;
 }
 
+
+.tasks-layout {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.tasks-activities {
+  flex: 2; /* Bigger column for activity list */
+}
+
+.tasks-summary {
+  flex: 1; /* Smaller column for counts */
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.task-summary-card {
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  text-align: center;
+}
+.task-summary-card h4 {
+  margin-bottom: 10px;
+}
+.task-count {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+
 /* 🔁 Responsive Design for Mobile */
 @media (max-width: 900px) {
   .content-row {

@@ -27,7 +27,7 @@ const TaskTable = () => {
 
   const fetchData = async () => {
     try {
-      const token = JSON.parse(localStorage.getItem("token"));
+      const token = localStorage.getItem("token");
       if (!token) return console.error("No token found in localStorage");
 
       const headers = {

@@ -4,7 +4,7 @@ import TodayActivityCard from "../../../components/activity/activitycard";
 import WeatherCard from "../../../components/weather";
 import { fetchHomeData } from "../../../services/homeService";
 import Swal from "sweetalert2";
-import "./HomePage.css";
+import "../../../styles/HomePageWorker.css";
 import TodayActivityCardWorker from "../../../components/activity/activitycardWorker";
 
 const HomePageWorker = () => {
@@ -17,7 +17,7 @@ const HomePageWorker = () => {
   useEffect(() => {
 const loadData = async () => {
   try {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
     const user = JSON.parse(localStorage.getItem("user_id"));
     if (!user) {
       Swal.fire("Error", "User not logged in", "error");
@@ -81,8 +81,8 @@ const fetchTasks = async () => {
   };
 
   return (
-    <div className="home-container">
-      <div className="content-row">
+    <div className="worker-home-container">
+      <div className="worker-content-row">
         {/* 🌤 Weather */}
         {/* <div className="left-column">
           <WeatherCard />
@@ -90,7 +90,7 @@ const fetchTasks = async () => {
 
         {/* ✅ Tasks */}
       {/* ✅ Tasks Section */}
-<div className="right-column">
+<div className="woker-right-column">
   <h5>📋 My Assigned Tasks ({myTasksCount})</h5>
 
   <div className="tasks-layout">

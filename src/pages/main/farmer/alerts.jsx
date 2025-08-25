@@ -28,7 +28,7 @@ const AlertsPage = () => {
 
   const token = localStorage.getItem("token");
   const headers = {
-    Authorization: `Bearer ${JSON.parse(token)}`,
+    Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
   };
 
@@ -168,11 +168,11 @@ const AlertsPage = () => {
         </div>
 
       {showCreateModal && (
-        <CreateAlertModal
-          onClose={() => setShowCreateModal(false)}
-          onTaskCreated={(newTask) => setTasks((prev) => [...prev, newTask])}
-        />
-      )}
+          <CreateAlertModal
+            onClose={() => setShowCreateModal(false)}
+            onAlertCreated={(newAlert) => setAlerts((prev) => [...prev, newAlert])}
+          />
+        )}
 
         <select
           value={filterType}

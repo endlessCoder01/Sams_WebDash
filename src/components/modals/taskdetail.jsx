@@ -9,7 +9,7 @@ const TaskDetailModal = ({ task, onClose, onAssign }) => {
   const [users, setUsers] = useState([]);
   const [selectedUserId, setSelectedUserId] = useState("");
 
-  const token = JSON.parse(localStorage.getItem("token"));
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
     const fetchUsers = async () => {

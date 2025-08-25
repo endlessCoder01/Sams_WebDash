@@ -4,7 +4,7 @@ import TodayActivityCard from "../../../components/activity/activitycard";
 import WeatherCard from "../../../components/weather";
 import { fetchHomeData } from "../../../services/homeService";
 import Swal from "sweetalert2";
-import "./HomePage.css";
+import "./HomePageF.css";
 
 const HomePage = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -15,18 +15,19 @@ const HomePage = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const token = JSON.parse(localStorage.getItem("token"));
+        const token = localStorage.getItem("token");
         const user = JSON.parse(localStorage.getItem("user_id"));
-        if (!user) {
+        if (!user || !token) {
           Swal.fire("Error", "User not logged in", "error");
           return;
         }
 
         const data = await fetchHomeData(user, token);
-        setAlerts(data.alerts);
-        setFarms(data.farms);
-        setMyTasksCount(data.myTasks.length);
+        setAlerts(data.alerts ?? []);
+        setFarms(data.farms ?? []);
+        setMyTasksCount(data.myTasks.length ?? 0);
       } catch (err) {
+        console.error(err);
         Swal.fire("Error", "Failed to load home data", "error");
       }
     };
@@ -43,10 +44,10 @@ const HomePage = () => {
         </div>
 
         {/* ✅ Tasks */}
-        <div className="right-column">
-            <h5>📋 My Assigned Tasks ({myTasksCount})</h5>
+      
+          {/* <h5>📋 My Assigned Tasks ({myTasksCount})</h5> */}
           <TodayActivityCard searchTerm={searchTerm} />
-        </div>
+        
 
         {/* 🚨 Alerts */}
         <div className="alerts-panel">

@@ -42,20 +42,24 @@ const AlertsWorkerPage = () => {
     setLoading(true);
     try {
       const res = await fetch(
-        `http://localhost:3000/alert/with_info/${userId}`,
+        `http://localhost:3000/alert/with_info`,
         { headers }
       );
+           console.log("maiweb4data", res)
       const data = await res.json();
 
       const possibleStatuses = ["initiated", "cancelled", "missed", "seen"];
       const statusedData = data.map((alert) => ({
         ...alert,
-        status: alert.status || possibleStatuses[Math.floor(Math.random() * 4)],
+        status: alert.alert_status,
       }));
+      console.log("maiwi", statusedData)
+      console.log("maiwe", data)
 
       setAlerts(statusedData);
       setFilteredAlerts(statusedData);
     } catch (err) {
+      console.log("maiwebCatch", err)
       Swal.fire("Error", "Failed to load alerts", "error");
     }
     setLoading(false);

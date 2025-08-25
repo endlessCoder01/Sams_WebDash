@@ -47,7 +47,7 @@ const AlertsPage = () => {
       const possibleStatuses = ["initiated", "cancelled", "missed", "seen"];
       const statusedData = data.map((alert) => ({
         ...alert,
-        status: alert.status || possibleStatuses[Math.floor(Math.random() * 4)],
+        status: alert.alert_status || possibleStatuses[Math.floor(Math.random() * 4)],
       }));
 
       setAlerts(statusedData);

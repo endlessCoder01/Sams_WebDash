@@ -23,6 +23,7 @@ import WorkerNavbar from "./components/navbars/workerNav";
 import AlertsWorkerPage from "./pages/main/worker/alerts";
 import TaskTableWorker from "./components/tasktableWorker";
 import ProfilePageWorker from "./pages/main/worker/profile";
+import ChatPage from "./pages/chatbot/ChatPage";
 
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
@@ -69,6 +70,8 @@ function App() {
               <Route path="/signup_farm/:userId" element={<FarmRegistration />} />
               <Route path="/signup_profile_role" element={<ProfileRole />} />
               <Route path="/signup" element={<SignUp />} />
+              <Route path="/chat" element={<ChatPage />} />
+
               <Route path="/" element={<Login onLogin={handleLogin} />} />
               <Route path="*" element={<Navigate to="/" replace />} />
             </>

@@ -17,7 +17,8 @@ const CreateTaskModal = ({ onClose, onTaskCreated }) => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const token = JSON.parse(localStorage.getItem("token"));
+        const token = localStorage.getItem("token");
+        const user = JSON.parse(localStorage.getItem("user_id"));
 
         const [usersRes, farmsRes] = await Promise.all([
           fetch("http://localhost:3000/users", {
@@ -26,7 +27,7 @@ const CreateTaskModal = ({ onClose, onTaskCreated }) => {
               "Content-Type": "application/json",
             },
           }),
-          fetch("http://localhost:3000/farms", {
+          fetch(`http://localhost:3000/farms/user/${user}`, {
             headers: {
               Authorization: `Bearer ${token}`,
               "Content-Type": "application/json",
@@ -36,6 +37,8 @@ const CreateTaskModal = ({ onClose, onTaskCreated }) => {
 
         const usersData = await usersRes.json();
         const farmsData = await farmsRes.json();
+
+        console.log("farmdata in task", farmsData)
 
         setUsers(Array.isArray(usersData) ? usersData : [usersData]);
         setFarms(Array.isArray(farmsData) ? farmsData : [farmsData]);
@@ -56,7 +59,7 @@ const handleSubmit = async (e) => {
   e.preventDefault();
 
   try {
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
 
     const payload = {
       ...task,
@@ -150,7 +153,7 @@ const handleSubmit = async (e) => {
 
           <div className="modal-actions">
             <button type="submit" className="create-btn">Create Task</button>
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button type="button" className="cancelbtn" onClick={onClose}>
               Cancel
             </button>
           </div>

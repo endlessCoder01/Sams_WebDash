@@ -223,15 +223,23 @@ const ProfileRole = () => {
       const toDoc = await sendToDocuments(profile, userRes.id);
 
       if (toDoc) {
-        Swal.fire({
-          icon: "success",
-          title: "Success!",
-          text: "User account created successfully.",
-          confirmButtonColor: "#3085d6",
-        });
-
-       navigate(`/signup_farm/${userRes.id}`);
-
+        if (selectedRole === "worker") {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "User account created successfully.",
+            confirmButtonColor: "#3085d6",
+          });
+          navigate(`/`);
+        } else {
+          Swal.fire({
+            icon: "success",
+            title: "Success!",
+            text: "User account created successfully.",
+            confirmButtonColor: "#3085d6",
+          });
+          navigate(`/signup_farm/${userRes.id}`);
+        }
       } else {
         Swal.fire({
           icon: "error",
@@ -276,8 +284,7 @@ const ProfileRole = () => {
           onChange={(e) => setSelectedRole(e.target.value)}
           options={[
             { value: "farmer", label: "Farmer" },
-            { value: "agronomist", label: "Agronomist" },
-            //   { value: "admin", label: "Admin" },
+            { value: "worker", label: "Worker" },
           ]}
         />
         <Input

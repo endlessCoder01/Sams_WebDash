@@ -208,10 +208,7 @@ const AlertsPage = () => {
               <tr>
                 <th>Message</th>
                 <th>Type</th>
-                <th>Severity</th>
-                <th>Farm</th>
                 <th>Initiator</th>
-                <th>Status</th>
                 <th>Actions</th>
               </tr>
             </thead>
@@ -227,17 +224,10 @@ const AlertsPage = () => {
                     className={alert.status === "missed" ? "missed-row" : ""}
                   >
                     <td>{alert.message}</td>
-                    <td>{alert.type}</td>
                     <td>{alert.severity}</td>
-                    <td>{alert.farm_name}</td>
                     <td>{alert.initiator_name}</td>
                     <td>
-                      <span className={`status-badge status-${alert.status}`}>
-                        {alert.status}
-                      </span>
-                    </td>
-                    <td>
-                      {alert.status === "initiated" && (
+                      {/* {alert.status === "initiated" && (
                         <>
                           <button
                             onClick={() => handleSeen(alert.alert_id)}
@@ -270,7 +260,7 @@ const AlertsPage = () => {
                         >
                           <FontAwesomeIcon icon={faTrash} /> Delete
                         </button>
-                      )}
+                      )} */}
                       {alert.status === "seen" && (
                         <span className="no-action" title="No Action">
                           <FontAwesomeIcon icon={faCheck} /> Done

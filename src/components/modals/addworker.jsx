@@ -13,7 +13,7 @@ const AddWorkerToFarm = () => {
 
   const token = localStorage.getItem("token");
   const headers = {
-    Authorization: `Bearer ${JSON.parse(token)}`,
+    Authorization: `Bearer ${token}`,
     "Content-Type": "application/json",
   };
 

@@ -216,6 +216,7 @@ h2 {
   color: #000;
 }
 .search-box {
+  margin-top: 14px;
   position: relative;
   display: inline-block;
 }
@@ -228,6 +229,7 @@ h2 {
   position: absolute;
   top: 50%;
   left: 8px;
+  bottom: 45px;
   transform: translateY(-50%);
   color: #888;
 }

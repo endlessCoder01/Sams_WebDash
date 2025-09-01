@@ -162,3 +162,64 @@ html,
   font-weight: bold;
   color: #6B6F1D;
 }
+
+.chat-overlay {
+  position: fixed;
+  bottom: 90px;
+  right: 20px;
+  z-index: 9999;
+}
+/* Floating Chat Button */
+.chat-float-btn {
+  position: fixed;
+  top: 50%;                /* vertically centered */
+  right: 20px;             /* stick to right edge */
+  transform: translateY(-50%);
+  background: #6B6F1D;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 55px;
+  height: 55px;
+  font-size: 22px;
+  cursor: pointer;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  transition: transform 0.2s ease, background 0.2s ease;
+  z-index: 10000;
+}
+
+.chat-float-btn:hover {
+  transform: translateY(-50%) scale(1.1);
+  background: #556017;
+}
+
+/* Chat Window */
+.chat-window {
+  position: fixed;
+  top: 50%;                 /* vertical center */
+  right: 90px;              /* leave space so button doesn’t overlap */
+  transform: translateY(-50%);
+  width: 320px;
+  height: 420px;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  border: 1px solid #ddd;
+  z-index: 9999;
+  animation: slideIn 0.3s ease forwards;
+}
+
+/* Animation for smooth entry */
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-50%) translateX(50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(-50%) translateX(0);
+  }
+}

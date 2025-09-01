@@ -6,7 +6,7 @@ const ProfilePage = () => {
   const [user, setUser] = useState(null);
   const [tasksCount, setTasksCount] = useState(0);
   const [farms, setFarms] = useState([]);
-  const token = JSON.parse(localStorage.getItem("token"));
+  const token = localStorage.getItem("token");
   const userId = JSON.parse(localStorage.getItem("user_id")); // Save user_id in login
 
   const headers = {

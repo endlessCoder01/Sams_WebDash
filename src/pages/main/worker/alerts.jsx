@@ -215,11 +215,8 @@ const AlertsWorkerPage = () => {
               <tr>
                 <th>Message</th>
                 <th>Type</th>
-                <th>Severity</th>
-                <th>Farm</th>
                 <th>Initiator</th>
                 <th>Status</th>
-                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
@@ -234,56 +231,14 @@ const AlertsWorkerPage = () => {
                     className={alert.status === "missed" ? "missed-row" : ""}
                   >
                     <td>{alert.message}</td>
-                    <td>{alert.type}</td>
                     <td>{alert.severity}</td>
-                    <td>{alert.farm_name}</td>
                     <td>{alert.initiator_name}</td>
                     <td>
                       <span className={`status-badge status-${alert.status}`}>
                         {alert.status}
                       </span>
                     </td>
-                    <td>
-                      {alert.status === "initiated" && (
-                        <>
-                          <button
-                            onClick={() => handleSeen(alert.alert_id)}
-                            className="seen-btn"
-                            title="Mark as Seen"
-                          >
-                            <FontAwesomeIcon icon={faEye} /> Seen
-                          </button>
-                          <button
-                            onClick={() => handleCancel(alert.alert_id)}
-                            className="cancel-btn"
-                            title="Cancel Alert"
-                          >
-                            <FontAwesomeIcon icon={faBan} /> Cancel
-                          </button>
-                          <button
-                            onClick={() => handleDelete(alert.alert_id)}
-                            className="delete-btn"
-                            title="Delete Alert"
-                          >
-                            <FontAwesomeIcon icon={faTrash} /> Delete
-                          </button>
-                        </>
-                      )}
-                      {["cancelled", "missed"].includes(alert.status) && (
-                        <button
-                          onClick={() => handleDelete(alert.alert_id)}
-                          className="delete-btn"
-                          title="Delete Missed/Cancelled"
-                        >
-                          <FontAwesomeIcon icon={faTrash} /> Delete
-                        </button>
-                      )}
-                      {alert.status === "seen" && (
-                        <span className="no-action" title="No Action">
-                          <FontAwesomeIcon icon={faCheck} /> Done
-                        </span>
-                      )}
-                    </td>
+
                   </tr>
                 ))
               )}

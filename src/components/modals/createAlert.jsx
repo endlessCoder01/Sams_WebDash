@@ -154,7 +154,7 @@ useEffect(() => {
             <button type="submit" className="create-btn">
               Create Alert
             </button>
-            <button type="button" className="cancel-btn" onClick={onClose}>
+            <button type="button" className="cancelbtn" onClick={onClose}>
               Cancel
             </button>
           </div>

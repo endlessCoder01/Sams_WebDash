@@ -14,7 +14,7 @@ const AllWorkers = () => {
       try {
         const response = await fetch("http://localhost:3000/farm-member/workers", {
           headers: {
-            Authorization: `Bearer ${JSON.parse(token)}`,
+            Authorization: `Bearer ${token}`,
           },
         });
 

@@ -102,7 +102,7 @@ const TaskTable = () => {
       status: "pending",
       assigned_to: userId,
     };
-    const token = JSON.parse(localStorage.getItem("token"));
+    const token = localStorage.getItem("token");
 
     try {
       const res = await fetch(
@@ -201,8 +201,8 @@ const TaskTable = () => {
 
             return (
               <tr key={task.task_id}>
-                <td>
-                  <FaUserCircle />
+                <td style={{}}>
+                  <FaUserCircle size={15} style={{marginRight: 5}}/>
                   {getUserName(task.assigned_to) || <em>Unassigned</em>}
                   {isUnassigned && !isCancelled && (
                     <>
@@ -254,11 +254,11 @@ const TaskTable = () => {
                   )}
 
                   {/* Show cancel button only if task is NOT cancelled or completed */}
-                  {!["cancelled", "completed"].includes(
+                  {!["cancelled", "completed", "pending"].includes(
                     task.status.toLowerCase()
                   ) && (
                     <button
-                      className="delete-btn"
+                      className="delete-btn-task"
                       onClick={() => deleteTask(task.task_id)}
                     >
                       Cancel

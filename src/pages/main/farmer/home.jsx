@@ -4,6 +4,7 @@ import TodayActivityCard from "../../../components/activity/activitycard";
 import WeatherCard from "../../../components/weather";
 import { fetchHomeData } from "../../../services/homeService";
 import Swal from "sweetalert2";
+import ChatPage from "../../chatbot/ChatPage"; 
 import "./HomePageF.css";
 
 const HomePage = () => {
@@ -11,6 +12,7 @@ const HomePage = () => {
   const [alerts, setAlerts] = useState([]);
   const [farms, setFarms] = useState([]);
   const [myTasksCount, setMyTasksCount] = useState(0);
+  const [showChat, setShowChat] = useState(false); // ✅ toggle ChatPage
 
   useEffect(() => {
     const loadData = async () => {
@@ -44,14 +46,10 @@ const HomePage = () => {
         </div>
 
         {/* ✅ Tasks */}
-      
-          {/* <h5>📋 My Assigned Tasks ({myTasksCount})</h5> */}
-          <TodayActivityCard searchTerm={searchTerm} />
-        
+        <TodayActivityCard searchTerm={searchTerm} />
 
         {/* 🚨 Alerts */}
         <div className="alerts-panel">
-          {/* 🔍 Top Search Bar */}
           <div className="top-bar">
             <input
               type="text"
@@ -78,6 +76,21 @@ const HomePage = () => {
           <AgriNewsSlider />
         </div>
       </div>
+
+      {/* 💬 Floating Chat Button */}
+      <button
+        className="chat-float-btn"
+        onClick={() => setShowChat((prev) => !prev)}
+      >
+        💬
+      </button>
+
+      {/* 📱 Show ChatPage as overlay */}
+      {showChat && (
+        <div className="chat-overlay">
+          <ChatPage onClose={() => setShowChat(false)} />
+        </div>
+      )}
     </div>
   );
 };

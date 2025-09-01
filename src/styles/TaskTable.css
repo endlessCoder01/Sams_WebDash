@@ -484,16 +484,22 @@
   background-color: #f3c4c4;
   color: #e22727;
 }
+.badge.initiated {
+  background-color: #c5c5c5;
+  color: #4e4e4e;
+}
 
 .assign-btn,
 .edit-btn,
-.delete-btn {
-  padding: 5px 10px;
-  margin: 3px;
+.delete-btn-task {
+  padding: 6px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
   border: none;
-  border-radius: 6px;
+  border-radius: 5px;
   cursor: pointer;
-  font-size: 0.9rem;
+  margin: 10;
+  transition: transform 0.2s, box-shadow 0.2s;
 }
 
 .assign-btn {
@@ -506,7 +512,7 @@
   color: white;
 }
 
-.delete-btn {
+.delete-btn-task {
   background-color: #d9534f;
   color: white;
 }

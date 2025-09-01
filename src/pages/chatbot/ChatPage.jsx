@@ -19,7 +19,7 @@ You are "SAMS Assistant", a concise, friendly farm management chatbot.
 
 const STORAGE_KEY = "sams_chat_history_v1";
 
-export default function ChatPage() {
+export default function ChatPage({ onClose }) {
   const [messages, setMessages] = useState(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
@@ -166,6 +166,7 @@ export default function ChatPage() {
         <div className="chat-title">
           <span className="dot" />
           <h2>SAMS Assistant</h2>
+           <button onClick={onClose}>✖</button>
         </div>
         <div className="header-actions">
           <button className="ghost-btn" onClick={clearChat} aria-label="Clear chat">

@@ -38,8 +38,19 @@ function App() {
     <div className="App">
       <Router>
         {/* Show navbar depending on role */}
-        {isAuthenticated && (role === "admin" || role === "farmer" || role === "agronomist") && <Navbar />}
-        {isAuthenticated && role === "worker" && <WorkerNavbar />}
+{isAuthenticated && (role === "admin" || role === "farmer" || role === "agronomist") && (
+  <Navbar
+    setIsAuthenticated={setIsAuthenticated}
+    setRole={setRole}
+  />
+)}
+        {isAuthenticated && role === "worker" && (
+  <WorkerNavbar
+    setIsAuthenticated={setIsAuthenticated}
+    setRole={setRole}
+  />
+)}
+
 
         <Routes>
           {isAuthenticated ? (

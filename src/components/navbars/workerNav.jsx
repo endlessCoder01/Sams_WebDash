@@ -8,18 +8,17 @@ import {
   faUser,
   faSignOutAlt,
   faTimes,
-  faUserGroup,
-  faPooStorm,
 } from "@fortawesome/free-solid-svg-icons";
 import "./Navbar.css";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { logout } from "../../services/logoutService";
 
-const WorkerNavbar = () => {
+const WorkerNavbar = ({ setIsAuthenticated, setRole }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
+  const user = JSON.parse(localStorage.getItem("user_id"));
 
   const toggleMenu = () => setIsOpen(!isOpen);
-          const user = JSON.parse(localStorage.getItem("user_id"));
-
 
   return (
     <>
@@ -34,11 +33,33 @@ const WorkerNavbar = () => {
           <FontAwesomeIcon icon={faTimes} />
         </button>
         <ul>
-          <li><Link to ="/home/worker" onClick={toggleMenu}><FontAwesomeIcon icon={faHome} /> Home</Link></li>
-          <li><Link to ="/worker/tasks" onClick={toggleMenu}><FontAwesomeIcon icon={faTasks} /> Tasks</Link></li>
-          <li><Link to={`/alerts/worker/${user}`} onClick={toggleMenu}><FontAwesomeIcon icon={faBell} /> Alerts</Link></li>          
-          <li><Link to="/worker/profile" onClick={toggleMenu}><FontAwesomeIcon icon={faUser} /> Profile</Link></li>
-          <li><Link to="#"><FontAwesomeIcon icon={faSignOutAlt} /> Logout</Link></li>
+          <li>
+            <Link to="/home/worker" onClick={toggleMenu}>
+              <FontAwesomeIcon icon={faHome} /> Home
+            </Link>
+          </li>
+          <li>
+            <Link to="/worker/tasks" onClick={toggleMenu}>
+              <FontAwesomeIcon icon={faTasks} /> Tasks
+            </Link>
+          </li>
+          <li>
+            <Link to={`/alerts/worker/${user}`} onClick={toggleMenu}>
+              <FontAwesomeIcon icon={faBell} /> Alerts
+            </Link>
+          </li>
+          <li>
+            <Link to="/worker/profile" onClick={toggleMenu}>
+              <FontAwesomeIcon icon={faUser} /> Profile
+            </Link>
+          </li>
+          <li>
+            <Link
+              onClick={() => logout(navigate, setIsAuthenticated, setRole)}
+            >
+              <FontAwesomeIcon icon={faSignOutAlt} /> Logout
+            </Link>
+          </li>
         </ul>
       </div>
     </>
